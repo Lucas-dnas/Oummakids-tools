@@ -2,9 +2,6 @@
 // Constantes
 const addBabysitter = document.getElementById('addBabysitter') as HTMLSelectElement;
 const addParent = document.getElementById('addParent') as HTMLSelectElement;
-const loginAdmin = document.getElementById('loginAdmin') as HTMLSelectElement;
-const loginParent = document.getElementById('loginParent') as HTMLSelectElement;
-const loginBabys = document.getElementById('loginBabys') as HTMLSelectElement;
 const getProfile = document.getElementById('getProfile') as HTMLSelectElement;
 const selectSendMessage = document.getElementById('selectSendMessage') as HTMLSelectElement;
 const deleteUser = document.getElementById('deleteUser') as HTMLSelectElement;
@@ -15,16 +12,14 @@ const getProfileBabysitter = document.getElementById('getProfileBabysitter') as 
 const incrementParent = document.getElementById('incrementParent') as HTMLSelectElement;
 const incrementBabysitter = document.getElementById('incrementBabysitter') as HTMLSelectElement;
 const deleteChat = document.getElementById('deleteChat') as HTMLSelectElement;
-const loadUserBtn = document.getElementById('loadUser') as HTMLSelectElement;
 const getAllChats = document.getElementById('getAllChats') as HTMLSelectElement;
 const getChat = document.getElementById('getChat') as HTMLSelectElement;
-const selects = document.querySelectorAll('select');
-
+const Login = document.getElementById('Login') as HTMLSelectElement;
 
 // Variables
 let token: string;
-let numParent = 0;
-let numBabysitter = 0;
+let numParent = 1;
+let numBabysitter = 1;
 
 
 // AddEnventListener
@@ -71,7 +66,6 @@ addParent?.addEventListener('click', async () => {
 });
 addBabysitter?.addEventListener('click', async () => {
     try {
-        const num: number = Math.trunc(Math.random() * 100);
         const response: Response = await fetch('http://localhost:3000/api/auth/register/babysitter', {
             method: "POST",
             headers: {
@@ -101,101 +95,8 @@ addBabysitter?.addEventListener('click', async () => {
         console.error(error)
     }
 });
-loginAdmin?.addEventListener('click', async () => {
-    try {
-        const response = await fetch('http://localhost:3000/api/auth/login', {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify(
-                {
-                    "email": "admin@test.com",
-                    "password": "password123"
-                }
-            )
-        });
-        const data: any = await response.json();
-        if (response.ok) {
-            console.log("Yessir! Good Sir! 🫡");
-            console.log(data);
-            token = data.user.token;
-            header(token)
-            await getAllBabysitters();
-        } else {
-            console.error("Erreur HTTP", response.status, data);
-        }
-    } catch (error: any) {
-        console.error(error)
-    }
-});
-loginParent?.addEventListener('click', async () => {
-    try {
-        const response: Response = await fetch('http://localhost:3000/api/auth/login', {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(
-                {
-                    "email": "parent@test.com",
-                    "password": "password123"
-                }
-            )
-        });
-
-        const data: any = await response.json();  // any car pas de types back
-        if (response.ok) {
-            console.log("You did it!");
-            console.log(data);
-            console.log(data.user.token);
-            token = data.user.token;
-            header(token);
-
-            await getAllChatsFunction();
-            await getAllBabysitters();
-            await deleteChatFunction();
-            await sendMessageFunction();
-        } else {
-            console.error("Error HTTP", response.status, data);
-        }
-    } catch (error: any) {
-        console.error(error)
-    }
-});
-loginBabys?.addEventListener('click', async () => {
-    try {
-        const response: Response = await fetch('http://localhost:3000/api/auth/login', {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify(
-                {
-                    "email": "babysitter@test.com",
-                    "password": "password123"
-                }
-            )
-        })
-        const data: any = await response.json();
-
-        // any car pas de types back
-        if (response.ok) {
-            console.log("You did it baby!");
-            console.log(data);
-            console.log(data.user.token);
-            token = data.user.token;
-            header(token)
-
-            await getAllChatsFunction();
-            await deleteChatFunction();
-            await sendMessageFunction();
-        } else {
-            console.error("Error HTTP", response.status);
-        }
-    } catch (error: any) {
-        console.error(error)
-    }
+Login?.addEventListener('click', async () => {
+    await login();
 });
 getProfile?.addEventListener('click', async () => {
     try {
@@ -215,9 +116,6 @@ getProfile?.addEventListener('click', async () => {
         console.error(error);
     }
 })
-
-
-// problème coté front, backend fonctionnel
 selectSendMessage?.addEventListener('click', async () => {
     try {
         const select = document.getElementById('selectSendMessage') as HTMLSelectElement;
@@ -332,9 +230,6 @@ getProfileBabysitter?.addEventListener('click', async () => {
         console.error(error)
     }
 });
-loadUserBtn?.addEventListener('click', async () => {
-    await loadUser();
-});
 getAllChats?.addEventListener('click', async () => {
     await getAllChatsFunction();
 });
@@ -366,29 +261,14 @@ function header(token: string): Headers {
     });
     return header;
 }
-async function loadUser() {
-    try {
-        const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: header(token) });
-        const data: any = await response.json();
-
-        if (response.ok) {
-            console.log(data);
-            for (const select of selects) {
-                select.innerHTML = '<option value="">-- Sélectionner un user --</option>';
-                data.users.forEach((user: any) => {
-                    const option = document.createElement('option');
-                    option.value = user.idUser;
-                    option.innerHTML = `[ ${user.idUser} - ${user.role}]`;
-                    select.appendChild(option);
-                });
-            }
-        } else {
-            console.error("Error HTTP on loadUser function", response.status, response.body);
-        }
-    } catch (error: any) {
-        console.error(error)
-    }
+function loadThreeFirstUsersCredentials(user: string) {
+    const option: any = document.createElement('option');
+    option.innerHTML = user;
+    option.value = user + '@test.com password123';
+    return option;
 }
+
+// Funcitons async
 async function getUser() {
     try {
         const response = await fetch('http://localhost:3000/api/profile', {
@@ -408,7 +288,8 @@ async function getUser() {
 }
 async function getAllChatsFunction() {
     try {
-        const select = document.getElementById('selectChat') as HTMLSelectElement;
+        const select = document.getElementById('selectGetChat') as HTMLSelectElement;
+        const selectDeleteChat = document.getElementById('selectDeleteChat') as HTMLSelectElement;
         const response: Response = await fetch('http://localhost:3000/api/profile/chats', {
             method: "GET",
             headers: header(token)
@@ -422,40 +303,18 @@ async function getAllChatsFunction() {
                 option.value = chat.idChat;
                 option.innerHTML = `[idBabysitter: ${chat.idBabysitter}]`;
                 select.appendChild(option);
+                selectDeleteChat.appendChild(option);
             });
         } else if (response.ok && (user.babysitter !== null)) {
             select.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
             chats.chats.forEach((chat: any) => {
                 const option = document.createElement('option');
                 option.value = chat.idChat;
-                option.innerHTML = `[ idParent: ${chat.idParent}]`;
+                option.innerHTML = `idParent: ${chat.idParent}`;
                 select.appendChild(option);
-            });
-        } else {
-            console.error("Error HTTP", response.status, response.body);
-            return;
-        }
-        console.log(chats);
-        return chats;
-    } catch (error: any) {
-        console.error(error)
-    }
-}
-async function deleteChatFunction() {
-    try {
-        const select = document.getElementById('selectDeleteChat') as HTMLSelectElement;
-        const response: Response = await fetch('http://localhost:3000/api/profile/chats', {
-            method: "GET",
-            headers: header(token)
-        });
-        const chats: any = await response.json();
-        if (response.ok) {
-            select.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
-            chats.chats.forEach((chat: any) => {
-                const option = document.createElement('option');
-                option.value = chat.idChat;
-                option.innerHTML = `[idBabysitter: ${chat.idBabysitter}]`;
-                select.appendChild(option);
+                selectDeleteChat.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
+                selectDeleteChat.appendChild(option);
+
             });
         } else {
             console.error("Error HTTP", response.status, response.body);
@@ -498,8 +357,6 @@ async function sendMessageFunction() {
         const select = document.getElementById('selectSendMessage') as HTMLSelectElement;
 
         const user: any = await getUser();
-
-
         if (user.babysitter !== null) {
             const allChats: any = await getAllChatsFunction()
             select.innerHTML = '<option value="">-- Sélectionner un parent --</option>';
@@ -518,7 +375,7 @@ async function sendMessageFunction() {
         });
         const data: any = await response.json();
         console.log(data);
-        
+
         select.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
         data.babysitters.forEach((babysitter: any) => {
             const option = document.createElement('option');
@@ -527,6 +384,69 @@ async function sendMessageFunction() {
             select.appendChild(option);
         });
         return;
+    } catch (error: any) {
+        console.error(error)
+    }
+}
+async function loginGeneratedUsers() {
+    try {
+        const select = document.getElementById('selectLogin') as HTMLSelectElement;
+        const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: header(token) });
+        const data: any = await response.json();
+
+        if (response.ok) {
+            console.log(data);
+            select.innerHTML = '<option value="">-- Sélectionner un user pour se login --</option>';
+            const admin = loadThreeFirstUsersCredentials('admin');
+            const parent = loadThreeFirstUsersCredentials('parent');
+            const babysitter = loadThreeFirstUsersCredentials('babysitter');
+
+            for (const element of [admin, parent, babysitter]) {
+                select.appendChild(element);
+            }
+
+            for (let i = 3; i < data.users.length; i++) {
+                const user = data.users[i];
+                const option = document.createElement('option');
+                option.value = user.email + ' ' + 'test';
+                option.innerHTML = `[ ${user.idUser} - ${user.role}]`;
+                select.appendChild(option);
+            }
+
+        } else {
+            console.error("Error HTTP on loadUser function", response.status, response.body);
+        }
+    } catch (error: any) {
+        console.error(error);
+    }
+}
+async function login() {
+    try {
+        const select = document.getElementById('selectLogin') as HTMLSelectElement;
+        const cerdentials: string[] = select.value.split(' ');
+        const response = await fetch('http://localhost:3000/api/auth/login', {
+            method: "POST",
+            headers: {
+                "Content-type": "application/json",
+            },
+            body: JSON.stringify(
+                {
+                    "email": cerdentials[0],
+                    "password": cerdentials[1]
+                }
+            )
+        });
+        const data: any = await response.json();
+        if (response.ok) {
+            console.log("Yessir! Good Sir! 🫡");
+            console.log(data);
+            token = data.user.token;
+            header(token)
+            await loginGeneratedUsers();
+            await sendMessageFunction();
+        } else {
+            console.error("Erreur HTTP", response.status, data);
+        }
     } catch (error: any) {
         console.error(error)
     }

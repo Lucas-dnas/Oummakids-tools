@@ -10,9 +10,6 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 // Constantes
 const addBabysitter = document.getElementById('addBabysitter');
 const addParent = document.getElementById('addParent');
-const loginAdmin = document.getElementById('loginAdmin');
-const loginParent = document.getElementById('loginParent');
-const loginBabys = document.getElementById('loginBabys');
 const getProfile = document.getElementById('getProfile');
 const selectSendMessage = document.getElementById('selectSendMessage');
 const deleteUser = document.getElementById('deleteUser');
@@ -23,14 +20,13 @@ const getProfileBabysitter = document.getElementById('getProfileBabysitter');
 const incrementParent = document.getElementById('incrementParent');
 const incrementBabysitter = document.getElementById('incrementBabysitter');
 const deleteChat = document.getElementById('deleteChat');
-const loadUserBtn = document.getElementById('loadUser');
 const getAllChats = document.getElementById('getAllChats');
 const getChat = document.getElementById('getChat');
-const selects = document.querySelectorAll('select');
+const Login = document.getElementById('Login');
 // Variables
 let token;
-let numParent = 0;
-let numBabysitter = 0;
+let numParent = 1;
+let numBabysitter = 1;
 // AddEnventListener
 incrementParent === null || incrementParent === void 0 ? void 0 : incrementParent.addEventListener('click', () => {
     console.log(numParent);
@@ -76,7 +72,6 @@ addParent === null || addParent === void 0 ? void 0 : addParent.addEventListener
 }));
 addBabysitter === null || addBabysitter === void 0 ? void 0 : addBabysitter.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const num = Math.trunc(Math.random() * 100);
         const response = yield fetch('http://localhost:3000/api/auth/register/babysitter', {
             method: "POST",
             headers: {
@@ -107,97 +102,8 @@ addBabysitter === null || addBabysitter === void 0 ? void 0 : addBabysitter.addE
         console.error(error);
     }
 }));
-loginAdmin === null || loginAdmin === void 0 ? void 0 : loginAdmin.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const response = yield fetch('http://localhost:3000/api/auth/login', {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json",
-            },
-            body: JSON.stringify({
-                "email": "admin@test.com",
-                "password": "password123"
-            })
-        });
-        const data = yield response.json();
-        if (response.ok) {
-            console.log("Yessir! Good Sir! 🫡");
-            console.log(data);
-            token = data.user.token;
-            header(token);
-            yield getAllBabysitters();
-        }
-        else {
-            console.error("Erreur HTTP", response.status, data);
-        }
-    }
-    catch (error) {
-        console.error(error);
-    }
-}));
-loginParent === null || loginParent === void 0 ? void 0 : loginParent.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const response = yield fetch('http://localhost:3000/api/auth/login', {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                "email": "parent@test.com",
-                "password": "password123"
-            })
-        });
-        const data = yield response.json(); // any car pas de types back
-        if (response.ok) {
-            console.log("You did it!");
-            console.log(data);
-            console.log(data.user.token);
-            token = data.user.token;
-            header(token);
-            yield getAllChatsFunction();
-            yield getAllBabysitters();
-            yield deleteChatFunction();
-            yield sendMessageFunction();
-        }
-        else {
-            console.error("Error HTTP", response.status, data);
-        }
-    }
-    catch (error) {
-        console.error(error);
-    }
-}));
-loginBabys === null || loginBabys === void 0 ? void 0 : loginBabys.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const response = yield fetch('http://localhost:3000/api/auth/login', {
-            method: "POST",
-            headers: {
-                "Content-type": "application/json"
-            },
-            body: JSON.stringify({
-                "email": "babysitter@test.com",
-                "password": "password123"
-            })
-        });
-        const data = yield response.json();
-        // any car pas de types back
-        if (response.ok) {
-            console.log("You did it baby!");
-            console.log(data);
-            console.log(data.user.token);
-            token = data.user.token;
-            header(token);
-            yield getAllChatsFunction();
-            yield deleteChatFunction();
-            yield sendMessageFunction();
-        }
-        else {
-            console.error("Error HTTP", response.status);
-        }
-    }
-    catch (error) {
-        console.error(error);
-    }
+Login === null || Login === void 0 ? void 0 : Login.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+    yield login();
 }));
 getProfile === null || getProfile === void 0 ? void 0 : getProfile.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     try {
@@ -218,7 +124,6 @@ getProfile === null || getProfile === void 0 ? void 0 : getProfile.addEventListe
         console.error(error);
     }
 }));
-// problème coté front, backend fonctionnel
 selectSendMessage === null || selectSendMessage === void 0 ? void 0 : selectSendMessage.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const select = document.getElementById('selectSendMessage');
@@ -341,9 +246,6 @@ getProfileBabysitter === null || getProfileBabysitter === void 0 ? void 0 : getP
         console.error(error);
     }
 }));
-loadUserBtn === null || loadUserBtn === void 0 ? void 0 : loadUserBtn.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    yield loadUser();
-}));
 getAllChats === null || getAllChats === void 0 ? void 0 : getAllChats.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     yield getAllChatsFunction();
 }));
@@ -375,32 +277,13 @@ function header(token) {
     });
     return header;
 }
-function loadUser() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const response = yield fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: header(token) });
-            const data = yield response.json();
-            if (response.ok) {
-                console.log(data);
-                for (const select of selects) {
-                    select.innerHTML = '<option value="">-- Sélectionner un user --</option>';
-                    data.users.forEach((user) => {
-                        const option = document.createElement('option');
-                        option.value = user.idUser;
-                        option.innerHTML = `[ ${user.idUser} - ${user.role}]`;
-                        select.appendChild(option);
-                    });
-                }
-            }
-            else {
-                console.error("Error HTTP on loadUser function", response.status, response.body);
-            }
-        }
-        catch (error) {
-            console.error(error);
-        }
-    });
+function loadThreeFirstUsersCredentials(user) {
+    const option = document.createElement('option');
+    option.innerHTML = user;
+    option.value = user + '@test.com password123';
+    return option;
 }
+// Funcitons async
 function getUser() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
@@ -424,7 +307,8 @@ function getUser() {
 function getAllChatsFunction() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const select = document.getElementById('selectChat');
+            const select = document.getElementById('selectGetChat');
+            const selectDeleteChat = document.getElementById('selectDeleteChat');
             const response = yield fetch('http://localhost:3000/api/profile/chats', {
                 method: "GET",
                 headers: header(token)
@@ -438,6 +322,7 @@ function getAllChatsFunction() {
                     option.value = chat.idChat;
                     option.innerHTML = `[idBabysitter: ${chat.idBabysitter}]`;
                     select.appendChild(option);
+                    selectDeleteChat.appendChild(option);
                 });
             }
             else if (response.ok && (user.babysitter !== null)) {
@@ -445,38 +330,10 @@ function getAllChatsFunction() {
                 chats.chats.forEach((chat) => {
                     const option = document.createElement('option');
                     option.value = chat.idChat;
-                    option.innerHTML = `[ idParent: ${chat.idParent}]`;
+                    option.innerHTML = `idParent: ${chat.idParent}`;
                     select.appendChild(option);
-                });
-            }
-            else {
-                console.error("Error HTTP", response.status, response.body);
-                return;
-            }
-            console.log(chats);
-            return chats;
-        }
-        catch (error) {
-            console.error(error);
-        }
-    });
-}
-function deleteChatFunction() {
-    return __awaiter(this, void 0, void 0, function* () {
-        try {
-            const select = document.getElementById('selectDeleteChat');
-            const response = yield fetch('http://localhost:3000/api/profile/chats', {
-                method: "GET",
-                headers: header(token)
-            });
-            const chats = yield response.json();
-            if (response.ok) {
-                select.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
-                chats.chats.forEach((chat) => {
-                    const option = document.createElement('option');
-                    option.value = chat.idChat;
-                    option.innerHTML = `[idBabysitter: ${chat.idBabysitter}]`;
-                    select.appendChild(option);
+                    selectDeleteChat.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
+                    selectDeleteChat.appendChild(option);
                 });
             }
             else {
@@ -551,6 +408,71 @@ function sendMessageFunction() {
                 select.appendChild(option);
             });
             return;
+        }
+        catch (error) {
+            console.error(error);
+        }
+    });
+}
+function loginGeneratedUsers() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const select = document.getElementById('selectLogin');
+            const response = yield fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: header(token) });
+            const data = yield response.json();
+            if (response.ok) {
+                console.log(data);
+                select.innerHTML = '<option value="">-- Sélectionner un user pour se login --</option>';
+                const admin = loadThreeFirstUsersCredentials('admin');
+                const parent = loadThreeFirstUsersCredentials('parent');
+                const babysitter = loadThreeFirstUsersCredentials('babysitter');
+                for (const element of [admin, parent, babysitter]) {
+                    select.appendChild(element);
+                }
+                for (let i = 3; i < data.users.length; i++) {
+                    const user = data.users[i];
+                    const option = document.createElement('option');
+                    option.value = user.email + ' ' + 'test';
+                    option.innerHTML = `[ ${user.idUser} - ${user.role}]`;
+                    select.appendChild(option);
+                }
+            }
+            else {
+                console.error("Error HTTP on loadUser function", response.status, response.body);
+            }
+        }
+        catch (error) {
+            console.error(error);
+        }
+    });
+}
+function login() {
+    return __awaiter(this, void 0, void 0, function* () {
+        try {
+            const select = document.getElementById('selectLogin');
+            const cerdentials = select.value.split(' ');
+            const response = yield fetch('http://localhost:3000/api/auth/login', {
+                method: "POST",
+                headers: {
+                    "Content-type": "application/json",
+                },
+                body: JSON.stringify({
+                    "email": cerdentials[0],
+                    "password": cerdentials[1]
+                })
+            });
+            const data = yield response.json();
+            if (response.ok) {
+                console.log("Yessir! Good Sir! 🫡");
+                console.log(data);
+                token = data.user.token;
+                header(token);
+                yield loginGeneratedUsers();
+                yield sendMessageFunction();
+            }
+            else {
+                console.error("Erreur HTTP", response.status, data);
+            }
         }
         catch (error) {
             console.error(error);
