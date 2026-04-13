@@ -11,7 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 const addBabysitter = document.getElementById('addBabysitter');
 const addParent = document.getElementById('addParent');
 const getProfile = document.getElementById('getProfile');
-const selectSendMessage = document.getElementById('selectSendMessage');
+const sendMessage = document.getElementById('sendMessage');
 const deleteUser = document.getElementById('deleteUser');
 const selectAllUsers = document.getElementById('selectAllUsers');
 const selectAllBabysitters = document.getElementById('selectAllBabysitters');
@@ -124,7 +124,7 @@ getProfile === null || getProfile === void 0 ? void 0 : getProfile.addEventListe
         console.error(error);
     }
 }));
-selectSendMessage === null || selectSendMessage === void 0 ? void 0 : selectSendMessage.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+sendMessage === null || sendMessage === void 0 ? void 0 : sendMessage.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const select = document.getElementById('selectSendMessage');
         const id = Number(select === null || select === void 0 ? void 0 : select.value);
@@ -307,8 +307,10 @@ function getUser() {
 function getAllChatsFunction() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
-            const select = document.getElementById('selectGetChat');
+            const select = document.getElementById('selectChat');
+            select.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
             const selectDeleteChat = document.getElementById('selectDeleteChat');
+            selectDeleteChat.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
             const response = yield fetch('http://localhost:3000/api/profile/chats', {
                 method: "GET",
                 headers: header(token)
@@ -316,24 +318,21 @@ function getAllChatsFunction() {
             const chats = yield response.json();
             const user = yield getUser();
             if (response.ok && (user.parent !== null)) {
-                select.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
                 chats.chats.forEach((chat) => {
                     const option = document.createElement('option');
                     option.value = chat.idChat;
                     option.innerHTML = `[idBabysitter: ${chat.idBabysitter}]`;
                     select.appendChild(option);
-                    selectDeleteChat.appendChild(option);
+                    selectDeleteChat.appendChild(option.cloneNode(true));
                 });
             }
             else if (response.ok && (user.babysitter !== null)) {
-                select.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
                 chats.chats.forEach((chat) => {
                     const option = document.createElement('option');
                     option.value = chat.idChat;
                     option.innerHTML = `idParent: ${chat.idParent}`;
                     select.appendChild(option);
-                    selectDeleteChat.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
-                    selectDeleteChat.appendChild(option);
+                    selectDeleteChat.appendChild(option.cloneNode(true));
                 });
             }
             else {
@@ -448,6 +447,7 @@ function loginGeneratedUsers() {
 }
 function login() {
     return __awaiter(this, void 0, void 0, function* () {
+        var _a;
         try {
             const select = document.getElementById('selectLogin');
             const cerdentials = select.value.split(' ');
@@ -467,7 +467,9 @@ function login() {
                 console.log(data);
                 token = data.user.token;
                 header(token);
-                yield loginGeneratedUsers();
+                if ((_a = cerdentials[0]) === null || _a === void 0 ? void 0 : _a.includes('admin')) {
+                    yield loginGeneratedUsers();
+                }
                 yield sendMessageFunction();
             }
             else {

@@ -3,7 +3,7 @@
 const addBabysitter = document.getElementById('addBabysitter') as HTMLSelectElement;
 const addParent = document.getElementById('addParent') as HTMLSelectElement;
 const getProfile = document.getElementById('getProfile') as HTMLSelectElement;
-const selectSendMessage = document.getElementById('selectSendMessage') as HTMLSelectElement;
+const sendMessage = document.getElementById('sendMessage') as HTMLSelectElement;
 const deleteUser = document.getElementById('deleteUser') as HTMLSelectElement;
 const selectAllUsers = document.getElementById('selectAllUsers') as HTMLSelectElement;
 const selectAllBabysitters = document.getElementById('selectAllBabysitters') as HTMLSelectElement;
@@ -116,7 +116,7 @@ getProfile?.addEventListener('click', async () => {
         console.error(error);
     }
 })
-selectSendMessage?.addEventListener('click', async () => {
+sendMessage?.addEventListener('click', async () => {
     try {
         const select = document.getElementById('selectSendMessage') as HTMLSelectElement;
         const id: number = Number(select?.value);
@@ -237,6 +237,7 @@ getChat?.addEventListener('click', async () => {
     try {
         const select = document.getElementById('selectChat') as HTMLSelectElement;
         const id: number = Number(select?.value);
+
         const response: Response = await fetch(`http://localhost:3000/api/profile/chats/${id}`, {
             method: "GET",
             headers: header(token)
@@ -288,38 +289,45 @@ async function getUser() {
 }
 async function getAllChatsFunction() {
     try {
-        const select = document.getElementById('selectGetChat') as HTMLSelectElement;
+        const select = document.getElementById('selectChat') as HTMLSelectElement;
+        select.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
+
         const selectDeleteChat = document.getElementById('selectDeleteChat') as HTMLSelectElement;
+        selectDeleteChat.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
+
         const response: Response = await fetch('http://localhost:3000/api/profile/chats', {
             method: "GET",
             headers: header(token)
         });
+
         const chats: any = await response.json();
         const user: any = await getUser();
+
         if (response.ok && (user.parent !== null)) {
-            select.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
+
             chats.chats.forEach((chat: any) => {
                 const option = document.createElement('option');
                 option.value = chat.idChat;
                 option.innerHTML = `[idBabysitter: ${chat.idBabysitter}]`;
                 select.appendChild(option);
-                selectDeleteChat.appendChild(option);
+                selectDeleteChat.appendChild(option.cloneNode(true));
             });
+
         } else if (response.ok && (user.babysitter !== null)) {
-            select.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
+
             chats.chats.forEach((chat: any) => {
                 const option = document.createElement('option');
                 option.value = chat.idChat;
                 option.innerHTML = `idParent: ${chat.idParent}`;
                 select.appendChild(option);
-                selectDeleteChat.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
-                selectDeleteChat.appendChild(option);
-
+                selectDeleteChat.appendChild(option.cloneNode(true));
             });
+
         } else {
             console.error("Error HTTP", response.status, response.body);
             return;
         }
+
         console.log(chats);
         return chats;
     } catch (error: any) {
@@ -442,7 +450,9 @@ async function login() {
             console.log(data);
             token = data.user.token;
             header(token)
-            await loginGeneratedUsers();
+            if (cerdentials[0]?.includes('admin')) {
+                await loginGeneratedUsers();
+            }
             await sendMessageFunction();
         } else {
             console.error("Erreur HTTP", response.status, data);
