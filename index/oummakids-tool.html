@@ -12,85 +12,82 @@
 
 <body>
 
-    <section>
+    <main>
+        <section>
 
-        <h1>Login</h1>
-        <select id="selectLogin">
-            <option value="admin@test.com password123">Admin</option>
-        </select>
-        <button id="Login">Login</button>
-        <br>
-        <br>
-        <br>
-        <h2>Admin routes</h2>
-        <button id="selectAllUsers">Get all users</button>
-        <br>
-
-        <button id="selectAllParents">Select all parents</button>
-        <br>
-
-        <button id="addBabysitter">Babys +1</button>
-        <br>
-
-        <button id="addParent">Parent +1</button>
-        <br>
-
-        <button id="incrementBabysitter">Increment Babysitter</button>
-        <br>
-
-        <button id="incrementParent">incrementParent</button>
-        <br>
-        <br>
-        <br>
-
-        <h2>Parents Routes</h2>
-        <button id="getProfile">Get profile</button>
-        <br>
-
-        <button id="selectAllBabysitters">Select all babysitters</button>
-        <br>
-
-        <select id="selectProfileBabysitter"></select>
-        <button id="getProfileBabysitter">Get profile babysitter or parent when it's not your profile</button>
-        <br>
+            <h1>Login</h1>
+            <select id="selectLogin">
+                <option value="admin@test.com password123">Admin</option>
+            </select>
+            <button id="Login">Login</button>
 
 
-        <select id="selectSendMessage">
-        </select>
-        <input type="text" id="inputSendMessage">
-        <button id="sendMessage">Send message</button>
-        <br>
-
-        <select id="selectCreateChat">
-        </select>
-        <button id="createChat">Create Chat</button>
-        <br>
-
-        <button id="getAllChats">Get all chats</button>
-        <br>
-
-        <select id="selectChat">
-        </select>
-        <button id="getChat">Get chat</button>
-        <br>
-
-        <select id="selectDeleteChat">
-        </select>
-        <button id="deleteChat">Delete chat</button>
-        <br>
-
-        <select id="selectParentProfile">
-        </select>
-        <button id="parentProfile">Get parent profile</button>
-<br>
-<br>
-<br>
+            <div class="section-admin">
+                <h2>Admin routes</h2>
+                <div class="row">
+                    <button id="selectAllUsers">Get all users</button>
 
 
-        <button id="deleteUser" name="Babys">Delete User</button>
-        <br>
+                    <button id="selectAllParents">Select all parents</button>
 
-    </section>
+
+                    <button id="addBabysitter">Babys +1</button>
+
+
+                    <button id="addParent">Parent +1</button>
+
+
+                    <button id="incrementBabysitter">Increment Babysitter</button>
+
+
+                    <button id="incrementParent">incrementParent</button>
+                </div>
+            </div>
+
+
+
+        </section>
+        <section class="section-user">
+            <div class="div-user">
+                <h2>Parents Routes</h2>
+                <div class="row">
+                    <button id="getProfile">Get profile</button>
+                    <button id="selectAllBabysitters">Select all babysitters</button>
+
+                    <select id="selectProfileBabysitter"></select>
+                    <button id="getProfileBabysitter">Get profile babysitter or parent when it's not your
+                        profile</button>
+
+                    <select id="selectCreateChat">
+                    </select>
+                    <button id="createChat">Create Chat</button>
+
+                    <button id="getAllChats">Get all chats</button>
+
+                    <select id="selectChat">
+                    </select>
+                    <button id="getChat">Get chat</button>
+
+                    <select id="selectDeleteChat">
+                    </select>
+                    <button id="deleteChat">Delete chat</button>
+
+                    <select id="selectParentProfile">
+                    </select>
+                    <button id="parentProfile">Get parent profile</button>
+                    <button id="deleteUser" name="Babys">Delete User</button>
+                </div>
+            </div>
+            <div class="section-user">
+                <div class="message">
+                    <select id="selectSendMessage">
+                    </select>
+                    <input type="text" id="inputSendMessage">
+                    <button id="sendMessage">Send message</button>
+                </div>
+            </div>
+        </section>
+    </main>
 </body>
 
 </html>

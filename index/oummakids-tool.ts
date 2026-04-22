@@ -18,7 +18,7 @@ const deleteChat = document.getElementById('deleteChat') as HTMLSelectElement;
 const getAllChats = document.getElementById('getAllChats') as HTMLSelectElement;
 const getChat = document.getElementById('getChat') as HTMLSelectElement;
 const Login = document.getElementById('Login') as HTMLSelectElement;
-const parentProfile = document.getElementById('parentProfile') as HTMLSelectElement;
+const getParentProfile = document.getElementById('parentProfile') as HTMLSelectElement;
 const sendMessage = document.getElementById('sendMessage');
 
 // Variables
@@ -41,7 +41,7 @@ incrementBabysitter?.addEventListener('click', () => {
     console.log('New num:' + numBabysitter);
 });
 
-    // Add User
+// Add User
 addParent?.addEventListener('click', async () => {
     try {
         const response: Response = await fetch('http://localhost:3000/api/auth/register/parent', {
@@ -106,12 +106,12 @@ addBabysitter?.addEventListener('click', async () => {
     }
 });
 
-    // Login
+// Login
 Login?.addEventListener('click', async () => {
     await AsyncFunctions.login();
 });
 
-    // GET something
+// GET something
 getProfile?.addEventListener('click', async () => {
     try {
         const response = await fetch('http://localhost:3000/api/profile', {
@@ -174,6 +174,26 @@ getChat?.addEventListener('click', async () => {
     }
 });
 
+getParentProfile?.addEventListener('click', async () => {
+    try {
+        const select = document.getElementById('selectParentProfile') as HTMLSelectElement;
+        const id: number = Number(select?.value);
+
+        const response: Response = await fetch(`http://localhost:3000/api/parent/${id}`, {
+            headers: funcitons.header(token)
+        });
+
+        const data: any = await response.json();
+        if (response.ok) {
+            console.log(data);
+        } else {
+            console.error("Error HTTP on parent Profile", response.status, response.body);
+        }
+    } catch (error: any) {
+        console.error(error);
+    }
+});
+// Send message
 sendMessage?.addEventListener('click', async () => {
     try {
         const select = document.getElementById('selectSendMessage') as HTMLSelectElement;
@@ -190,7 +210,7 @@ sendMessage?.addEventListener('click', async () => {
         console.log(error);
     }
 });
-
+// Create chat
 createChat?.addEventListener('click', async () => {
     try {
         const select = document.getElementById('selectCreateChat') as HTMLSelectElement;
@@ -219,7 +239,7 @@ createChat?.addEventListener('click', async () => {
     }
 });
 
-    // DELETE something
+// DELETE something
 deleteUser?.addEventListener('click', async () => {
     try {
         const response: Response = await fetch('http://localhost:3000/api/profile', {
@@ -257,7 +277,7 @@ deleteChat?.addEventListener('click', async () => {
     }
 });
 
-    // SELECT something
+// SELECT something
 selectAllParents?.addEventListener('click', async () => {
     try {
 
@@ -297,21 +317,3 @@ selectAllUsers?.addEventListener('click', async () => {
     }
 });
 
-
-parentProfile?.addEventListener('click', async () => {
-    try {
-        const select = document.getElementById('selectParentProfile') as HTMLSelectElement;
-        const id: number = Number(select?.value);
-        const response: Response = await fetch(`http://localhost:3000/api/parents/${id}`, {
-            headers: funcitons.header(token)
-        });
-        const data: any = await response.json();
-        if (response.ok) {
-            console.log(data);
-        } else {
-            console.error("Error HTTP on parent Profile", response.status, response.body);
-        }
-    } catch (error: any) {
-        console.error(error);
-    }
-});

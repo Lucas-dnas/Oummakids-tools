@@ -24,6 +24,7 @@ export const AsyncFunctions = {
                 }
                 else {
                     console.error("Error HTTP on getUser function", response.status);
+                    return;
                 }
             }
             catch (error) {
@@ -226,9 +227,22 @@ export const AsyncFunctions = {
                         selectAllBabysitters.appendChild(option);
                         selectCreateChat.appendChild(option.cloneNode(true));
                     });
+                    const user = yield this.getUser();
+                    if (user.babysitter !== null) {
+                        const selectParentProfile = document.getElementById('selectParentProfile');
+                        selectParentProfile.innerHTML = '<option value="">-- Sélectionner un parent --</option>';
+                        chats.chats.forEach((chat) => {
+                            const option = document.createElement('option');
+                            option.value = chat.idParent;
+                            option.innerHTML = `[idParent: ${chat.idParent}`;
+                            selectParentProfile.appendChild(option);
+                        });
+                    }
+                    return;
                 }
                 else {
                     console.error("Erreur HTTP", response.status, data);
+                    return;
                 }
             }
             catch (error) {

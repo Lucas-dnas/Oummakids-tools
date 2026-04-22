@@ -26,7 +26,7 @@ const deleteChat = document.getElementById('deleteChat');
 const getAllChats = document.getElementById('getAllChats');
 const getChat = document.getElementById('getChat');
 const Login = document.getElementById('Login');
-const parentProfile = document.getElementById('parentProfile');
+const getParentProfile = document.getElementById('parentProfile');
 const sendMessage = document.getElementById('sendMessage');
 // Variables
 let numParent = 1;
@@ -175,6 +175,26 @@ getChat === null || getChat === void 0 ? void 0 : getChat.addEventListener('clic
         console.error(error);
     }
 }));
+getParentProfile === null || getParentProfile === void 0 ? void 0 : getParentProfile.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const select = document.getElementById('selectParentProfile');
+        const id = Number(select === null || select === void 0 ? void 0 : select.value);
+        const response = yield fetch(`http://localhost:3000/api/parent/${id}`, {
+            headers: funcitons.header(token)
+        });
+        const data = yield response.json();
+        if (response.ok) {
+            console.log(data);
+        }
+        else {
+            console.error("Error HTTP on parent Profile", response.status, response.body);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}));
+// Send message
 sendMessage === null || sendMessage === void 0 ? void 0 : sendMessage.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const select = document.getElementById('selectSendMessage');
@@ -189,6 +209,7 @@ sendMessage === null || sendMessage === void 0 ? void 0 : sendMessage.addEventLi
         console.log(error);
     }
 }));
+// Create chat
 createChat === null || createChat === void 0 ? void 0 : createChat.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     try {
         const select = document.getElementById('selectCreateChat');
@@ -290,25 +311,6 @@ selectAllUsers === null || selectAllUsers === void 0 ? void 0 : selectAllUsers.a
         }
         else {
             console.error("Error HTTP", response.status);
-        }
-    }
-    catch (error) {
-        console.error(error);
-    }
-}));
-parentProfile === null || parentProfile === void 0 ? void 0 : parentProfile.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const select = document.getElementById('selectParentProfile');
-        const id = Number(select === null || select === void 0 ? void 0 : select.value);
-        const response = yield fetch(`http://localhost:3000/api/parents/${id}`, {
-            headers: funcitons.header(token)
-        });
-        const data = yield response.json();
-        if (response.ok) {
-            console.log(data);
-        }
-        else {
-            console.error("Error HTTP on parent Profile", response.status, response.body);
         }
     }
     catch (error) {
