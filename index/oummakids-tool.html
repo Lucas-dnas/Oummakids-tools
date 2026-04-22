@@ -5,13 +5,14 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="./oummakids-tool.css">
-    <script src="./oummakids-tool.js" type="module"></script>
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="../index/oummakids-tool.js" type="module" defer></script>
     <title>Tools-babysitter</title>
 </head>
 
 <body>
 
-    <div>
+    <section>
 
         <h1>Login</h1>
         <select id="selectLogin">
@@ -42,7 +43,7 @@
         <br>
         <br>
 
-        <h2>Routes Parents</h2>
+        <h2>Parents Routes</h2>
         <button id="getProfile">Get profile</button>
         <br>
 
@@ -53,14 +54,17 @@
         <button id="getProfileBabysitter">Get profile babysitter or parent when it's not your profile</button>
         <br>
 
-        <button id="deleteUser" name="Babys">Delete User</button>
-        <br>
 
         <select id="selectSendMessage">
         </select>
-        <button id="sendMessage">Send message to babysitter</button>
+        <input type="text" id="inputSendMessage">
+        <button id="sendMessage">Send message</button>
         <br>
 
+        <select id="selectCreateChat">
+        </select>
+        <button id="createChat">Create Chat</button>
+        <br>
 
         <button id="getAllChats">Get all chats</button>
         <br>
@@ -75,7 +79,18 @@
         <button id="deleteChat">Delete chat</button>
         <br>
 
-    </div>
+        <select id="selectParentProfile">
+        </select>
+        <button id="parentProfile">Get parent profile</button>
+<br>
+<br>
+<br>
+
+
+        <button id="deleteUser" name="Babys">Delete User</button>
+        <br>
+
+    </section>
 </body>
 
 </html>
