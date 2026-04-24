@@ -41,7 +41,7 @@ export const AsyncFunctions = {
                 selectDeleteChat.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
                 const response = yield fetch('http://localhost:3000/api/profile/chats', {
                     method: "GET",
-                    headers: funcitons.header(token)
+                    headers: funcitons.header(token),
                 });
                 const chats = yield response.json();
                 const user = yield this.getUser();
@@ -56,6 +56,8 @@ export const AsyncFunctions = {
                         select.appendChild(option);
                         selectDeleteChat.appendChild(optionDelete);
                     });
+                    console.log(chats);
+                    return chats;
                 }
                 else if (response.ok && (user.babysitter !== null)) {
                     chats.chats.forEach((chat) => {
@@ -68,13 +70,10 @@ export const AsyncFunctions = {
                         select.appendChild(option);
                         selectDeleteChat.appendChild(optionDelete);
                     });
+                    console.log(chats);
+                    return chats;
                 }
-                else {
-                    console.error("Error HTTP", response.status, response.body);
-                    return;
-                }
-                console.log(chats);
-                return chats;
+                return;
             }
             catch (error) {
                 console.error(error);
@@ -158,9 +157,11 @@ export const AsyncFunctions = {
                         option.innerHTML = `[ ${user.idUser} - ${user.role}]`;
                         select.appendChild(option);
                     }
+                    return;
                 }
                 else {
                     console.error("Error HTTP on loadUser function", response.status, response.body);
+                    return;
                 }
             }
             catch (error) {
@@ -173,8 +174,6 @@ export const AsyncFunctions = {
             var _a;
             try {
                 const select = document.getElementById('selectLogin');
-                const selectAllBabysitters = document.getElementById('selectProfileBabysitter');
-                const selectCreateChat = document.getElementById('selectCreateChat');
                 const cerdentials = select.value.split(' ');
                 const response = yield fetch('http://localhost:3000/api/auth/login', {
                     method: "POST",
@@ -208,36 +207,7 @@ export const AsyncFunctions = {
                         yield this.loginGeneratedUsers();
                         return;
                     }
-                    yield this.sendMessageFunction();
-                    const chats = yield this.getAllChatsFunction();
-                    for (const chat of chats.chats) {
-                        socket.emit('joinChat', chat.idChat);
-                    }
-                    selectAllBabysitters.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
-                    selectCreateChat.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
-                    const response = yield fetch('http://localhost:3000/api/babysitters', {
-                        method: "GET",
-                        headers: funcitons.header(token)
-                    });
-                    const dataBabysitter = yield response.json();
-                    dataBabysitter.babysitters.forEach((babysitter) => {
-                        const option = document.createElement('option');
-                        option.value = babysitter.idUser;
-                        option.innerHTML = `[idBabysitter: ${babysitter.idUser}]`;
-                        selectAllBabysitters.appendChild(option);
-                        selectCreateChat.appendChild(option.cloneNode(true));
-                    });
-                    const user = yield this.getUser();
-                    if (user.babysitter !== null) {
-                        const selectParentProfile = document.getElementById('selectParentProfile');
-                        selectParentProfile.innerHTML = '<option value="">-- Sélectionner un parent --</option>';
-                        chats.chats.forEach((chat) => {
-                            const option = document.createElement('option');
-                            option.value = chat.idParent;
-                            option.innerHTML = `[idParent: ${chat.idParent}`;
-                            selectParentProfile.appendChild(option);
-                        });
-                    }
+                    yield this.loadHtmlElement();
                     return;
                 }
                 else {
@@ -249,6 +219,103 @@ export const AsyncFunctions = {
                 console.error(error);
             }
         });
-    }
+    },
+    loadHtmlElement() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const selectAllBabysitters = document.getElementById('selectProfileBabysitter');
+                const selectCreateChat = document.getElementById('selectCreateChat');
+                yield this.sendMessageFunction();
+                const chats = yield this.getAllChatsFunction();
+                for (const chat of chats.chats) {
+                    socketVariable.emit('joinChat', chat.idChat);
+                }
+                selectAllBabysitters.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
+                selectCreateChat.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
+                const response = yield fetch('http://localhost:3000/api/babysitters', {
+                    method: "GET",
+                    headers: funcitons.header(token)
+                });
+                const dataBabysitter = yield response.json();
+                dataBabysitter.babysitters.forEach((babysitter) => {
+                    const option = document.createElement('option');
+                    option.value = babysitter.idUser;
+                    option.innerHTML = `[idBabysitter: ${babysitter.idUser}]`;
+                    selectAllBabysitters.appendChild(option);
+                    selectCreateChat.appendChild(option.cloneNode(true));
+                });
+                const user = yield this.getUser();
+                if (user.babysitter !== null) {
+                    const selectParentProfile = document.getElementById('selectParentProfile');
+                    selectParentProfile.innerHTML = '<option value="">-- Sélectionner un parent --</option>';
+                    chats.chats.forEach((chat) => {
+                        const option = document.createElement('option');
+                        option.value = chat.idParent;
+                        option.innerHTML = `[idParent: ${chat.idParent}`;
+                        selectParentProfile.appendChild(option);
+                    });
+                }
+                yield this.createImgProfile(user);
+                return;
+            }
+            catch (error) {
+                console.error(error);
+            }
+        });
+    },
+    createImgProfile(user) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const divImgProfile = document.getElementById('imgProfile');
+                const selectImg = document.getElementById('imgProfileElement');
+                if (selectImg) {
+                    selectImg.remove();
+                }
+                console.log(divImgProfile);
+                if (!divImgProfile) {
+                    return;
+                }
+                yield fetch(`http://localhost:3000/api${user.user.imgProfile}`, {
+                    method: 'GET',
+                    headers: funcitons.header(token)
+                })
+                    .then(response => response.blob())
+                    .then(blob => {
+                    const imgUrl = URL.createObjectURL(blob);
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imgUrl;
+                    imgElement.id = 'imgProfileElement';
+                    imgElement.className = 'imgProfile';
+                    divImgProfile.appendChild(imgElement);
+                })
+                    .catch(error => console.error('Erreur:', error));
+                return;
+            }
+            catch (error) {
+                console.error(error);
+            }
+        });
+    },
+    profileImg(file) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const formData = new FormData();
+                console.log(file);
+                formData.append('imgProfile', file);
+                console.log(formData);
+                const response = yield fetch('http://localhost:3000/api/profile', {
+                    method: "PUT",
+                    headers: funcitons.header(token, true),
+                    body: formData
+                });
+                const data = yield response.json();
+                console.log(data);
+                return data;
+            }
+            catch (error) {
+                console.error(error);
+            }
+        });
+    },
 };
 //# sourceMappingURL=asyncFunctions.js.map

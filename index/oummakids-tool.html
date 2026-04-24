@@ -13,14 +13,19 @@
 <body>
 
     <main>
-        <section>
 
+        <section>
             <h1>Login</h1>
             <select id="selectLogin">
                 <option value="admin@test.com password123">Admin</option>
             </select>
             <button id="Login">Login</button>
 
+            <div id="imgProfile"></div>
+        </section>
+        <section>
+
+            <div id="imgProfile"></div>
 
             <div class="section-admin">
                 <h2>Admin routes</h2>
@@ -86,6 +91,14 @@
                     <button id="sendMessage">Send message</button>
                 </div>
             </div>
+        </section>
+        <section class="section-update" id="section-update">
+            <h3>Update profile image</h3>
+            <form method="post" enctype="multipart/form-data">
+                <label for="inputImg">Chosse a picture:</label>
+                <input name="inputImg" id="inputImg" type="file" accept=".jpg, .jpeg, .pnj">
+            </form>
+            <button id="imgProfileBtn">Update img</button>
         </section>
     </main>
 </body>
