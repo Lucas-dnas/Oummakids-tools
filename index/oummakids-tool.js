@@ -7,9 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { socketVariable, token } from "../src/ts/AsyncFunctions/asyncFunctions.js";
+import { AsyncFunctions, socketVariable, token } from "../src/ts/AsyncFunctions/asyncFunctions.js";
 import { funcitons } from "../src/ts/functions/functions.js";
-import { AsyncFunctions } from "../src/ts/AsyncFunctions/asyncFunctions.js";
 // Constantes
 const addBabysitter = document.getElementById('addBabysitter');
 const addParent = document.getElementById('addParent');
@@ -26,25 +25,32 @@ const deleteChat = document.getElementById('deleteChat');
 const getAllChats = document.getElementById('getAllChats');
 const getChat = document.getElementById('getChat');
 const Login = document.getElementById('Login');
-const parentProfile = document.getElementById('parentProfile');
+const getParentProfile = document.getElementById('parentProfile');
 const sendMessage = document.getElementById('sendMessage');
+const inputImg = document.getElementById('inputImg');
+const imgProfileBtn = document.getElementById('imgProfileBtn');
+const sectionUpdate = document.getElementById('section-update');
 // Variables
 let numParent = 1;
 let numBabysitter = 1;
 // AddEnventListene
-// Increments numParent or numBabysitter
-incrementParent === null || incrementParent === void 0 ? void 0 : incrementParent.addEventListener('click', () => {
+// Increments numParent
+incrementParent === null || incrementParent === void 0 ? void 0 : incrementParent.addEventListener('click', (e) => {
+    e.preventDefault();
     console.log(numParent);
     numParent++;
     console.log('New num:' + numParent);
 });
-incrementBabysitter === null || incrementBabysitter === void 0 ? void 0 : incrementBabysitter.addEventListener('click', () => {
+// Increments numBabysitter
+incrementBabysitter === null || incrementBabysitter === void 0 ? void 0 : incrementBabysitter.addEventListener('click', (e) => {
+    e.preventDefault();
     console.log(numBabysitter);
     numBabysitter++;
     console.log('New num:' + numBabysitter);
 });
 // Add User
-addParent === null || addParent === void 0 ? void 0 : addParent.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+addParent === null || addParent === void 0 ? void 0 : addParent.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
     try {
         const response = yield fetch('http://localhost:3000/api/auth/register/parent', {
             method: "POST",
@@ -76,7 +82,8 @@ addParent === null || addParent === void 0 ? void 0 : addParent.addEventListener
         console.error(error);
     }
 }));
-addBabysitter === null || addBabysitter === void 0 ? void 0 : addBabysitter.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+addBabysitter === null || addBabysitter === void 0 ? void 0 : addBabysitter.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
     try {
         const response = yield fetch('http://localhost:3000/api/auth/register/babysitter', {
             method: "POST",
@@ -108,12 +115,10 @@ addBabysitter === null || addBabysitter === void 0 ? void 0 : addBabysitter.addE
         console.error(error);
     }
 }));
-// Login
-Login === null || Login === void 0 ? void 0 : Login.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    yield AsyncFunctions.login();
-}));
-// GET something
-getProfile === null || getProfile === void 0 ? void 0 : getProfile.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+// GET
+// get profile
+getProfile === null || getProfile === void 0 ? void 0 : getProfile.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
     try {
         const response = yield fetch('http://localhost:3000/api/profile', {
             method: "GET",
@@ -132,7 +137,9 @@ getProfile === null || getProfile === void 0 ? void 0 : getProfile.addEventListe
         console.error(error);
     }
 }));
-getProfileBabysitter === null || getProfileBabysitter === void 0 ? void 0 : getProfileBabysitter.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+// get babysitter profile
+getProfileBabysitter === null || getProfileBabysitter === void 0 ? void 0 : getProfileBabysitter.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
     try {
         const select = document.getElementById('selectProfileBabysitter');
         const id = Number(select.value);
@@ -152,10 +159,14 @@ getProfileBabysitter === null || getProfileBabysitter === void 0 ? void 0 : getP
         console.error(error);
     }
 }));
-getAllChats === null || getAllChats === void 0 ? void 0 : getAllChats.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+// get all chats of this user
+getAllChats === null || getAllChats === void 0 ? void 0 : getAllChats.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
     yield AsyncFunctions.login();
 }));
-getChat === null || getChat === void 0 ? void 0 : getChat.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+//get one chat of this user
+getChat === null || getChat === void 0 ? void 0 : getChat.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
     try {
         const select = document.getElementById('selectChat');
         const id = Number(select === null || select === void 0 ? void 0 : select.value);
@@ -175,7 +186,126 @@ getChat === null || getChat === void 0 ? void 0 : getChat.addEventListener('clic
         console.error(error);
     }
 }));
-sendMessage === null || sendMessage === void 0 ? void 0 : sendMessage.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+//get a parent profile, if the babysitter has a chat with him
+getParentProfile === null || getParentProfile === void 0 ? void 0 : getParentProfile.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
+    try {
+        const select = document.getElementById('selectParentProfile');
+        const id = Number(select === null || select === void 0 ? void 0 : select.value);
+        const response = yield fetch(`http://localhost:3000/api/parent/${id}`, {
+            headers: funcitons.header(token)
+        });
+        const data = yield response.json();
+        if (response.ok) {
+            console.log(data);
+        }
+        else {
+            console.error("Error HTTP on parent Profile", response.status, response.body);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}));
+// DELETE something
+// delete this user
+deleteUser === null || deleteUser === void 0 ? void 0 : deleteUser.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
+    try {
+        const response = yield fetch('http://localhost:3000/api/profile', {
+            method: "DELETE",
+            headers: funcitons.header(token)
+        });
+        if (response.status === 204) {
+            console.log("You died");
+        }
+        else {
+            console.error("Error HTTP", response.status);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}));
+// delete the chat selected
+deleteChat === null || deleteChat === void 0 ? void 0 : deleteChat.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
+    try {
+        const select = document.getElementById('selectDeleteChat');
+        const id = Number(select.value);
+        if (!id) {
+            console.log('Id missing for deleted chat');
+        }
+        const response = yield fetch(`http://localhost:3000/api/profile/chats/${id}`, {
+            method: "DELETE",
+            headers: funcitons.header(token)
+        });
+        if (response.status === 204) {
+            console.log("Chat killed!");
+        }
+        else {
+            console.error("Error HTTP", response.status);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}));
+// SELECT something
+// ADMIN: Select all parents
+selectAllParents === null || selectAllParents === void 0 ? void 0 : selectAllParents.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
+    try {
+        const response = yield fetch('http://localhost:3000/api/profile/admin/getAllParents', {
+            method: "GET",
+            headers: funcitons.header(token)
+        });
+        const data = yield response.json();
+        if (response.ok) {
+            console.log(data);
+        }
+        else {
+            console.error("Error HTTP", response.status, response.body);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}));
+// Select all babysitters
+selectAllBabysitters === null || selectAllBabysitters === void 0 ? void 0 : selectAllBabysitters.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
+    yield AsyncFunctions.getAllBabysitters();
+}));
+// ADMIN: Select all users
+selectAllUsers === null || selectAllUsers === void 0 ? void 0 : selectAllUsers.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
+    try {
+        const response = yield fetch('http://localhost:3000/api/profile/admin/getAllUsers', {
+            method: "GET",
+            headers: funcitons.header(token)
+        });
+        const data = yield response.json();
+        if (response.ok) {
+            console.log(data);
+        }
+        else {
+            console.error("Error HTTP", response.status);
+        }
+    }
+    catch (error) {
+        console.error(error);
+    }
+}));
+// POST
+// Login
+Login === null || Login === void 0 ? void 0 : Login.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
+    yield AsyncFunctions.login();
+}));
+// Send message
+sendMessage === null || sendMessage === void 0 ? void 0 : sendMessage.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
     try {
         const select = document.getElementById('selectSendMessage');
         const input = document.getElementById('inputSendMessage');
@@ -189,7 +319,9 @@ sendMessage === null || sendMessage === void 0 ? void 0 : sendMessage.addEventLi
         console.log(error);
     }
 }));
-createChat === null || createChat === void 0 ? void 0 : createChat.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+// PARENT: Create chat
+createChat === null || createChat === void 0 ? void 0 : createChat.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
     try {
         const select = document.getElementById('selectCreateChat');
         const id = Number(select === null || select === void 0 ? void 0 : select.value);
@@ -216,103 +348,31 @@ createChat === null || createChat === void 0 ? void 0 : createChat.addEventListe
         console.error(error);
     }
 }));
-// DELETE something
-deleteUser === null || deleteUser === void 0 ? void 0 : deleteUser.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const response = yield fetch('http://localhost:3000/api/profile', {
-            method: "DELETE",
-            headers: funcitons.header(token)
-        });
-        if (response.status === 204) {
-            console.log("You died");
-        }
-        else {
-            console.error("Error HTTP", response.status);
-        }
+// Modification of img profile
+let file;
+inputImg === null || inputImg === void 0 ? void 0 : inputImg.addEventListener('change', (e) => {
+    var _a;
+    e.preventDefault();
+    file = (_a = inputImg.files) === null || _a === void 0 ? void 0 : _a[0];
+    console.log(file);
+});
+inputImg === null || inputImg === void 0 ? void 0 : inputImg.addEventListener('dragover', (e) => {
+    var _a;
+    e.preventDefault();
+    file = (_a = inputImg.files) === null || _a === void 0 ? void 0 : _a[0];
+    console.log(file);
+});
+imgProfileBtn === null || imgProfileBtn === void 0 ? void 0 : imgProfileBtn.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
+    if (!file || file === undefined) {
+        console.error('No such file');
+        return;
     }
-    catch (error) {
-        console.error(error);
-    }
+    console.log(AsyncFunctions.profileImg(file));
+    return;
 }));
-deleteChat === null || deleteChat === void 0 ? void 0 : deleteChat.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const select = document.getElementById('selectDeleteChat');
-        const id = Number(select.value);
-        if (!id) {
-            console.log('Id missing for deleted chat');
-        }
-        const response = yield fetch(`http://localhost:3000/api/profile/chats/${id}`, {
-            method: "DELETE",
-            headers: funcitons.header(token)
-        });
-        if (response.status === 204) {
-            console.log("Chat killed!");
-        }
-        else {
-            console.error("Error HTTP", response.status);
-        }
-    }
-    catch (error) {
-        console.error(error);
-    }
-}));
-// SELECT something
-selectAllParents === null || selectAllParents === void 0 ? void 0 : selectAllParents.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const response = yield fetch('http://localhost:3000/api/profile/admin/getAllParents', {
-            method: "GET",
-            headers: funcitons.header(token)
-        });
-        const data = yield response.json();
-        if (response.ok) {
-            console.log(data);
-        }
-        else {
-            console.error("Error HTTP", response.status, response.body);
-        }
-    }
-    catch (error) {
-        console.error(error);
-    }
-}));
-selectAllBabysitters === null || selectAllBabysitters === void 0 ? void 0 : selectAllBabysitters.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    yield AsyncFunctions.getAllBabysitters();
-}));
-selectAllUsers === null || selectAllUsers === void 0 ? void 0 : selectAllUsers.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const response = yield fetch('http://localhost:3000/api/profile/admin/getAllUsers', {
-            method: "GET",
-            headers: funcitons.header(token)
-        });
-        const data = yield response.json();
-        if (response.ok) {
-            console.log(data);
-        }
-        else {
-            console.error("Error HTTP", response.status);
-        }
-    }
-    catch (error) {
-        console.error(error);
-    }
-}));
-parentProfile === null || parentProfile === void 0 ? void 0 : parentProfile.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
-    try {
-        const select = document.getElementById('selectParentProfile');
-        const id = Number(select === null || select === void 0 ? void 0 : select.value);
-        const response = yield fetch(`http://localhost:3000/api/parents/${id}`, {
-            headers: funcitons.header(token)
-        });
-        const data = yield response.json();
-        if (response.ok) {
-            console.log(data);
-        }
-        else {
-            console.error("Error HTTP on parent Profile", response.status, response.body);
-        }
-    }
-    catch (error) {
-        console.error(error);
-    }
-}));
+// fetch("/upload", {
+//   method: "POST",
+//   body: formData
+// });
 //# sourceMappingURL=oummakids-tool.js.map

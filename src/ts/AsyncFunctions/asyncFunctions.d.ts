@@ -7,5 +7,8 @@ export declare const AsyncFunctions: {
     sendMessageFunction(): Promise<void>;
     loginGeneratedUsers(): Promise<void>;
     login(): Promise<void>;
+    loadHtmlElement(): Promise<void>;
+    createImgProfile(user: any): Promise<void>;
+    profileImg(file: File): Promise<void>;
 };
 //# sourceMappingURL=asyncFunctions.d.ts.map

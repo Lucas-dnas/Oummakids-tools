@@ -18,6 +18,7 @@ export const AsyncFunctions = {
                 return profile;
             } else {
                 console.error("Error HTTP on getUser function", response.status);
+                return;
             }
         } catch (error: any) {
             console.error(error);
@@ -33,14 +34,13 @@ export const AsyncFunctions = {
 
             const response: Response = await fetch('http://localhost:3000/api/profile/chats', {
                 method: "GET",
-                headers: funcitons.header(token)
+                headers: funcitons.header(token),
             });
 
             const chats: any = await response.json();
             const user: any = await this.getUser();
 
             if (response.ok && (user.parent !== null)) {
-
                 chats.chats.forEach((chat: any) => {
                     const option = document.createElement('option');
                     const optionDelete = document.createElement('option');
@@ -51,9 +51,10 @@ export const AsyncFunctions = {
                     select.appendChild(option);
                     selectDeleteChat.appendChild(optionDelete);
                 });
+                console.log(chats);
+                return chats;
 
             } else if (response.ok && (user.babysitter !== null)) {
-
                 chats.chats.forEach((chat: any) => {
                     const option = document.createElement('option');
                     const optionDelete = document.createElement('option');
@@ -64,19 +65,17 @@ export const AsyncFunctions = {
                     select.appendChild(option);
                     selectDeleteChat.appendChild(optionDelete);
                 });
-
-            } else {
-                console.error("Error HTTP", response.status, response.body);
-                return;
+                console.log(chats);
+                return chats;
             }
 
-            console.log(chats);
-            return chats;
+            return;
+
         } catch (error: any) {
             console.error(error)
         }
     },
-    async getAllBabysitters() {
+    async getAllBabysitters(): Promise<any> {
         try {
             const response: Response = await fetch('http://localhost:3000/api/babysitters', {
                 method: "GET",
@@ -94,7 +93,7 @@ export const AsyncFunctions = {
             console.error(error)
         }
     },
-    async sendMessageFunction() {
+    async sendMessageFunction(): Promise<void> {
         try {
             const select = document.getElementById('selectSendMessage') as HTMLSelectElement;
 
@@ -108,7 +107,7 @@ export const AsyncFunctions = {
                     option.innerHTML = `[idParent: ${chat.idChat}]`;
                     select.appendChild(option);
                 });
-                return;
+                return
             }
             if (user.parent !== null) {
                 const allChats: any = await this.getAllChatsFunction()
@@ -120,14 +119,12 @@ export const AsyncFunctions = {
                     select.appendChild(option);
                 });
             }
-
-
             return;
         } catch (error: any) {
             console.error(error)
         }
     },
-    async loginGeneratedUsers() {
+    async loginGeneratedUsers(): Promise<void> {
         try {
             const select = document.getElementById('selectLogin') as HTMLSelectElement;
             const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: funcitons.header(token) });
@@ -151,20 +148,20 @@ export const AsyncFunctions = {
                     option.innerHTML = `[ ${user.idUser} - ${user.role}]`;
                     select.appendChild(option);
                 }
-
+                return;
             } else {
                 console.error("Error HTTP on loadUser function", response.status, response.body);
+                return;
             }
         } catch (error: any) {
             console.error(error);
         }
     },
-    async login() {
+    async login(): Promise<void> {
         try {
             const select = document.getElementById('selectLogin') as HTMLSelectElement;
-            const selectAllBabysitters = document.getElementById('selectProfileBabysitter') as HTMLSelectElement;
-            const selectCreateChat = document.getElementById('selectCreateChat') as HTMLSelectElement;
             const cerdentials: string[] = select.value.split(' ');
+
             const response = await fetch('http://localhost:3000/api/auth/login', {
                 method: "POST",
                 headers: {
@@ -203,36 +200,119 @@ export const AsyncFunctions = {
                     return;
                 }
 
-                await this.sendMessageFunction();
+                await this.loadHtmlElement();
+                return;
 
-                const chats = await this.getAllChatsFunction();
-
-                for (const chat of chats.chats) {
-                    socket.emit('joinChat', chat.idChat);
-                }
-                selectAllBabysitters.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
-                selectCreateChat.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
-
-                const response: Response = await fetch('http://localhost:3000/api/babysitters', {
-                    method: "GET",
-                    headers: funcitons.header(token)
-                });
-                const dataBabysitter: any = await response.json();
-                dataBabysitter.babysitters.forEach((babysitter: any) => {
-                    const option = document.createElement('option');
-                    option.value = babysitter.idUser;
-                    option.innerHTML = `[idBabysitter: ${babysitter.idUser}]`;
-                    selectAllBabysitters.appendChild(option);
-                    selectCreateChat.appendChild(option.cloneNode(true));
-
-                });
             } else {
                 console.error("Erreur HTTP", response.status, data);
+                return;
             }
         } catch (error: any) {
             console.error(error)
         }
-    }
+    },
 
 
+    async loadHtmlElement() {
+        try {
+            const selectAllBabysitters = document.getElementById('selectProfileBabysitter') as HTMLSelectElement;
+            const selectCreateChat = document.getElementById('selectCreateChat') as HTMLSelectElement;
+
+            await this.sendMessageFunction();
+
+            const chats = await this.getAllChatsFunction();
+
+            for (const chat of chats.chats) {
+                socketVariable.emit('joinChat', chat.idChat);
+            }
+            selectAllBabysitters.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
+            selectCreateChat.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
+
+            const response: Response = await fetch('http://localhost:3000/api/babysitters', {
+                method: "GET",
+                headers: funcitons.header(token)
+            });
+            const dataBabysitter: any = await response.json();
+            dataBabysitter.babysitters.forEach((babysitter: any) => {
+                const option = document.createElement('option');
+                option.value = babysitter.idUser;
+                option.innerHTML = `[idBabysitter: ${babysitter.idUser}]`;
+                selectAllBabysitters.appendChild(option);
+                selectCreateChat.appendChild(option.cloneNode(true));
+
+            });
+
+            const user: any = await this.getUser();
+            if (user.babysitter !== null) {
+                const selectParentProfile = document.getElementById('selectParentProfile') as HTMLSelectElement;
+                selectParentProfile.innerHTML = '<option value="">-- Sélectionner un parent --</option>';
+
+                chats.chats.forEach((chat: any) => {
+                    const option = document.createElement('option');
+                    option.value = chat.idParent;
+                    option.innerHTML = `[idParent: ${chat.idParent}`;
+                    selectParentProfile.appendChild(option);
+                })
+            }
+
+            await this.createImgProfile(user);
+            return;
+        } catch (error: any) {
+            console.error(error);
+        }
+    },
+
+    async createImgProfile(user: any): Promise<void> {
+        try {
+            const divImgProfile = document.getElementById('imgProfile') as HTMLDivElement;
+            const selectImg = document.getElementById('imgProfileElement') as HTMLImageElement;
+            if (selectImg) {
+                selectImg.remove();
+            }
+            console.log(divImgProfile);
+            
+            if (!divImgProfile) {
+                return;
+            }
+            await fetch(`http://localhost:3000/api${user.user.imgProfile}`, {
+                method: 'GET',
+                headers: funcitons.header(token)
+            })
+                .then(response => response.blob())
+                .then(blob => {
+                    const imgUrl = URL.createObjectURL(blob);
+                    const imgElement = document.createElement('img');
+                    imgElement.src = imgUrl;
+                    imgElement.id = 'imgProfileElement';
+                    imgElement.className = 'imgProfile';
+                    divImgProfile.appendChild(imgElement);
+                })
+                .catch(error => console.error('Erreur:', error));
+            return;
+        } catch (error: any) {
+            console.error(error);
+        }
+    },
+
+    async profileImg(file: File): Promise<void> {
+        try {
+            const formData: FormData = new FormData();
+            console.log(file);
+
+            formData.append('imgProfile', file);
+            console.log(formData);
+
+            const response: Response = await fetch('http://localhost:3000/api/profile', {
+                method: "PUT",
+                headers: funcitons.header(token, true),
+                body: formData
+            });
+
+            const data = await response.json();
+            console.log(data);
+            return data;
+        } catch (error: any) {
+            console.error(error);
+        }
+    },
 }

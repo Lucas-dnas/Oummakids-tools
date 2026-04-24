@@ -81,13 +81,36 @@ npx tsc --watch
 ## Structure des fichiers
 
 ```
-oummakids-tools/
-├── index.html       # Interface
-├── style.css        # Styles
-├── app.ts           # Source TypeScript (à éditer)
-├── app.js           # Compilé par tsc (ne pas éditer)
-├── tsconfig.json    # Config TypeScript
-└── package.json
+├── Kanban.md
+├── README.md
+├── index
+│   ├── oummakids-tool..js
+│   ├── oummakids-tool.css        # CSS
+│   ├── oummakids-tool.d.ts
+│   ├── oummakids-tool.d.ts.map
+│   ├── oummakids-tool.html
+│   ├── oummakids-tool.js         # FIchier a utilisé, ou le ts est compiler
+│   ├── oummakids-tool.js.map
+│   ├── oummakids-tool.map
+│   └── oummakids-tool.ts         # On écrit ici
+├── node_modules
+├── package-lock.json
+├── package.json
+├── src
+│   └── ts
+│       ├── AsyncFunctions
+│       │   ├── asyncFunctions.d.ts
+│       │   ├── asyncFunctions.d.ts.map
+│       │   ├── asyncFunctions.js
+│       │   ├── asyncFunctions.js.map
+│       │   └── asyncFunctions.ts
+│       └── functions
+│           ├── functions.d.ts
+│           ├── functions.d.ts.map
+│           ├── functions.js
+│           ├── functions.js.map
+│           └── functions.ts
+└── tsconfig.json
 ```
 
 ---
@@ -107,18 +130,27 @@ Certaines actions nécessitent d'être authentifié. Toujours commencer par un *
 
 | Bouton | Méthode | Route | Auth requise |
 |---|---|---|---|
-| Babys +1 | POST | `/api/auth/register/babysitter` | Non |
-| Parent +1 | POST | `/api/auth/register/parent` | Non |
-| Login Admin | POST | `/api/auth/login` | Non |
-| Login Parent | POST | `/api/auth/login` | Non |
-| Login Babys | POST | `/api/auth/login` | Non |
 | Get all users | GET | `/api/profile/admin/getAllUsers` | Oui (Admin) |
 | Select all parents | GET | `/api/profile/admin/getAllParents` | Oui (Admin) |
 | Select all babys | GET | `/api/babysitters` | Oui |
-| Delete User | DELETE | `/api/profile` | Oui |
+| Get profile| GET| `/api/profile`|Oui|
+| Get all chats| GET| `/api/profile/chats`| Oui|
+| Get all babysitters| GET| `/api/babysitters`|Oui|
+| Get all users| GET| `/api/profile/admin/`| Oui (n)|
+| Login| GET| `/api/auth/login`| Non|
+| Get babysitters for | GET| `/api/babysitters`|Oui|
+| Get profile image| GET| `/api/profile/img...` (route dynamique via `user.user.imgProfile`)* | Oui |
 | Get profile | GET | `/api/profile` | Oui |
+| Delete User | DELETE | `/api/profile` | Oui |
 | Delete chat | DELETE | `/api/profile/chat/:id` | Oui |
 | Start a new Chat | POST | `/api/profile/chats/:id` | Oui (Parent) |
+| Put profile image| PUT| /api/profile`| Oui|
+| Socket join chat| Sckt | `joinChat`| |
+| Socket connection| Sckt | `http://localhost:3000`| Oui (token)|
+| Babys +1 | POST | `/api/auth/register/babysitter` | Non |
+| Parent +1 | POST | `/api/auth/register/parent` | Non |
+| Login Babys | POST | `/api/auth/login` | Non |
+
 
 ### Résultats
 

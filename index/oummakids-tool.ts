@@ -1,6 +1,5 @@
-import { socketVariable, token } from "../src/ts/AsyncFunctions/asyncFunctions.js";
+import { AsyncFunctions, socketVariable, token } from "../src/ts/AsyncFunctions/asyncFunctions.js";
 import { funcitons } from "../src/ts/functions/functions.js";
-import { AsyncFunctions } from "../src/ts/AsyncFunctions/asyncFunctions.js";
 
 // Constantes
 const addBabysitter = document.getElementById('addBabysitter') as HTMLSelectElement;
@@ -18,9 +17,11 @@ const deleteChat = document.getElementById('deleteChat') as HTMLSelectElement;
 const getAllChats = document.getElementById('getAllChats') as HTMLSelectElement;
 const getChat = document.getElementById('getChat') as HTMLSelectElement;
 const Login = document.getElementById('Login') as HTMLSelectElement;
-const parentProfile = document.getElementById('parentProfile') as HTMLSelectElement;
-const sendMessage = document.getElementById('sendMessage');
-
+const getParentProfile = document.getElementById('parentProfile') as HTMLSelectElement;
+const sendMessage = document.getElementById('sendMessage') as HTMLSelectElement;
+const inputImg = document.getElementById('inputImg') as HTMLInputElement;
+const imgProfileBtn = document.getElementById('imgProfileBtn') as HTMLSelectElement;
+const sectionUpdate = document.getElementById('section-update') as HTMLImageElement;
 // Variables
 let numParent = 1;
 let numBabysitter = 1;
@@ -28,21 +29,24 @@ let numBabysitter = 1;
 
 // AddEnventListene
 
-    // Increments numParent or numBabysitter
-incrementParent?.addEventListener('click', () => {
+// Increments numParent
+incrementParent?.addEventListener('click', (e) => {
+    e.preventDefault();
     console.log(numParent);
     numParent++;
     console.log('New num:' + numParent);
 });
-
-incrementBabysitter?.addEventListener('click', () => {
+// Increments numBabysitter
+incrementBabysitter?.addEventListener('click', (e) => {
+    e.preventDefault();
     console.log(numBabysitter);
     numBabysitter++
     console.log('New num:' + numBabysitter);
 });
 
-    // Add User
-addParent?.addEventListener('click', async () => {
+// Add User
+addParent?.addEventListener('click', async (e) => {
+    e.preventDefault();
     try {
         const response: Response = await fetch('http://localhost:3000/api/auth/register/parent', {
             method: "POST",
@@ -74,7 +78,8 @@ addParent?.addEventListener('click', async () => {
     }
 });
 
-addBabysitter?.addEventListener('click', async () => {
+addBabysitter?.addEventListener('click', async (e) => {
+    e.preventDefault();
     try {
         const response: Response = await fetch('http://localhost:3000/api/auth/register/babysitter', {
             method: "POST",
@@ -106,13 +111,10 @@ addBabysitter?.addEventListener('click', async () => {
     }
 });
 
-    // Login
-Login?.addEventListener('click', async () => {
-    await AsyncFunctions.login();
-});
-
-    // GET something
-getProfile?.addEventListener('click', async () => {
+// GET
+// get profile
+getProfile?.addEventListener('click', async (e) => {
+    e.preventDefault();
     try {
         const response = await fetch('http://localhost:3000/api/profile', {
             method: "GET",
@@ -130,8 +132,9 @@ getProfile?.addEventListener('click', async () => {
         console.error(error);
     }
 });
-
-getProfileBabysitter?.addEventListener('click', async () => {
+// get babysitter profile
+getProfileBabysitter?.addEventListener('click', async (e) => {
+    e.preventDefault();
     try {
         const select = document.getElementById('selectProfileBabysitter') as HTMLSelectElement;
         const id: number = Number(select.value);
@@ -149,12 +152,14 @@ getProfileBabysitter?.addEventListener('click', async () => {
         console.error(error)
     }
 });
-
-getAllChats?.addEventListener('click', async () => {
+// get all chats of this user
+getAllChats?.addEventListener('click', async (e) => {
+    e.preventDefault();
     await AsyncFunctions.login();
 });
-
-getChat?.addEventListener('click', async () => {
+//get one chat of this user
+getChat?.addEventListener('click', async (e) => {
+    e.preventDefault();
     try {
         const select = document.getElementById('selectChat') as HTMLSelectElement;
         const id: number = Number(select?.value);
@@ -173,8 +178,122 @@ getChat?.addEventListener('click', async () => {
         console.error(error);
     }
 });
+//get a parent profile, if the babysitter has a chat with him
+getParentProfile?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        const select = document.getElementById('selectParentProfile') as HTMLSelectElement;
+        const id: number = Number(select?.value);
 
-sendMessage?.addEventListener('click', async () => {
+        const response: Response = await fetch(`http://localhost:3000/api/parent/${id}`, {
+            headers: funcitons.header(token)
+        });
+
+        const data: any = await response.json();
+        if (response.ok) {
+            console.log(data);
+        } else {
+            console.error("Error HTTP on parent Profile", response.status, response.body);
+        }
+    } catch (error: any) {
+        console.error(error);
+    }
+});
+
+// DELETE something
+// delete this user
+deleteUser?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        const response: Response = await fetch('http://localhost:3000/api/profile', {
+            method: "DELETE",
+            headers: funcitons.header(token)
+        });
+        if (response.status === 204) {
+            console.log("You died");
+        } else {
+            console.error("Error HTTP", response.status);
+        }
+    } catch (error: any) {
+        console.error(error);
+    }
+});
+// delete the chat selected
+deleteChat?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        const select = document.getElementById('selectDeleteChat') as HTMLSelectElement;
+        const id: number = Number(select.value);
+        if (!id) {
+            console.log('Id missing for deleted chat');
+        }
+        const response: Response = await fetch(`http://localhost:3000/api/profile/chats/${id}`, {
+            method: "DELETE",
+            headers: funcitons.header(token)
+        });
+        if (response.status === 204) {
+            console.log("Chat killed!");
+        } else {
+            console.error("Error HTTP", response.status);
+        }
+    } catch (error: any) {
+        console.error(error);
+    }
+});
+
+// SELECT something
+// ADMIN: Select all parents
+selectAllParents?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+
+        const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllParents', {
+            method: "GET",
+            headers: funcitons.header(token)
+        });
+        const data: JSON = await response.json();
+        if (response.ok) {
+            console.log(data);
+        } else {
+            console.error("Error HTTP", response.status, response.body);
+        }
+    } catch (error: any) {
+        console.error(error)
+    }
+});
+// Select all babysitters
+selectAllBabysitters?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    await AsyncFunctions.getAllBabysitters();
+});
+// ADMIN: Select all users
+selectAllUsers?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    try {
+        const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', {
+            method: "GET",
+            headers: funcitons.header(token)
+        });
+        const data: JSON = await response.json();
+        if (response.ok) {
+            console.log(data);
+        } else {
+            console.error("Error HTTP", response.status);
+        }
+    } catch (error: any) {
+        console.error(error);
+    }
+});
+
+// POST
+// Login
+Login?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    await AsyncFunctions.login();
+});
+// Send message
+sendMessage?.addEventListener('click', async (e) => {
+    e.preventDefault();
     try {
         const select = document.getElementById('selectSendMessage') as HTMLSelectElement;
         const input = document.getElementById('inputSendMessage') as HTMLSelectElement;
@@ -190,8 +309,9 @@ sendMessage?.addEventListener('click', async () => {
         console.log(error);
     }
 });
-
-createChat?.addEventListener('click', async () => {
+// PARENT: Create chat
+createChat?.addEventListener('click', async (e) => {
+    e.preventDefault();
     try {
         const select = document.getElementById('selectCreateChat') as HTMLSelectElement;
         const id: number = Number(select?.value);
@@ -218,100 +338,31 @@ createChat?.addEventListener('click', async () => {
         console.error(error);
     }
 });
+// Modification of img profile
+let file: File | undefined;
+inputImg?.addEventListener('change', (e) => {
+    e.preventDefault();
+    file = inputImg.files?.[0];
+    console.log(file);
+});
+inputImg?.addEventListener('dragover', (e) => {
+    e.preventDefault();
+    file = inputImg.files?.[0];
+    console.log(file);
+});
 
-    // DELETE something
-deleteUser?.addEventListener('click', async () => {
-    try {
-        const response: Response = await fetch('http://localhost:3000/api/profile', {
-            method: "DELETE",
-            headers: funcitons.header(token)
-        });
-        if (response.status === 204) {
-            console.log("You died");
-        } else {
-            console.error("Error HTTP", response.status);
-        }
-    } catch (error: any) {
-        console.error(error);
+imgProfileBtn?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    if (!file || file === undefined) {
+        console.error('No such file');
+        return;
     }
-});
-
-deleteChat?.addEventListener('click', async () => {
-    try {
-        const select = document.getElementById('selectDeleteChat') as HTMLSelectElement;
-        const id: number = Number(select.value);
-        if (!id) {
-            console.log('Id missing for deleted chat');
-        }
-        const response: Response = await fetch(`http://localhost:3000/api/profile/chats/${id}`, {
-            method: "DELETE",
-            headers: funcitons.header(token)
-        });
-        if (response.status === 204) {
-            console.log("Chat killed!");
-        } else {
-            console.error("Error HTTP", response.status);
-        }
-    } catch (error: any) {
-        console.error(error);
-    }
-});
-
-    // SELECT something
-selectAllParents?.addEventListener('click', async () => {
-    try {
-
-        const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllParents', {
-            method: "GET",
-            headers: funcitons.header(token)
-        });
-        const data: JSON = await response.json();
-        if (response.ok) {
-            console.log(data);
-        } else {
-            console.error("Error HTTP", response.status, response.body);
-        }
-    } catch (error: any) {
-        console.error(error)
-    }
-});
-
-selectAllBabysitters?.addEventListener('click', async () => {
-    await AsyncFunctions.getAllBabysitters();
-});
-
-selectAllUsers?.addEventListener('click', async () => {
-    try {
-        const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', {
-            method: "GET",
-            headers: funcitons.header(token)
-        });
-        const data: JSON = await response.json();
-        if (response.ok) {
-            console.log(data);
-        } else {
-            console.error("Error HTTP", response.status);
-        }
-    } catch (error: any) {
-        console.error(error);
-    }
+    console.log(AsyncFunctions.profileImg(file));
+    return;
 });
 
 
-parentProfile?.addEventListener('click', async () => {
-    try {
-        const select = document.getElementById('selectParentProfile') as HTMLSelectElement;
-        const id: number = Number(select?.value);
-        const response: Response = await fetch(`http://localhost:3000/api/parents/${id}`, {
-            headers: funcitons.header(token)
-        });
-        const data: any = await response.json();
-        if (response.ok) {
-            console.log(data);
-        } else {
-            console.error("Error HTTP on parent Profile", response.status, response.body);
-        }
-    } catch (error: any) {
-        console.error(error);
-    }
-});
+// fetch("/upload", {
+//   method: "POST",
+//   body: formData
+// });
