@@ -57,7 +57,6 @@ export const AsyncFunctions = {
                         selectDeleteChat.appendChild(optionDelete);
                     });
                     console.log(chats);
-                    return chats;
                 }
                 else if (response.ok && (user.babysitter !== null)) {
                     chats.chats.forEach((chat) => {
@@ -71,9 +70,8 @@ export const AsyncFunctions = {
                         selectDeleteChat.appendChild(optionDelete);
                     });
                     console.log(chats);
-                    return chats;
                 }
-                return;
+                return chats;
             }
             catch (error) {
                 console.error(error);
@@ -102,7 +100,7 @@ export const AsyncFunctions = {
             }
         });
     },
-    sendMessageFunction() {
+    loadUsersForsendMessageFunction() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const select = document.getElementById('selectSendMessage');
@@ -135,6 +133,7 @@ export const AsyncFunctions = {
             }
         });
     },
+    // Generate the 3 first user who be charged with fixtures (back-end side)
     loginGeneratedUsers() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -208,6 +207,7 @@ export const AsyncFunctions = {
                         return;
                     }
                     yield this.loadHtmlElement();
+                    yield this.createUpdateProfileFields();
                     return;
                 }
                 else {
@@ -220,12 +220,13 @@ export const AsyncFunctions = {
             }
         });
     },
+    // Load all element in selector
     loadHtmlElement() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const selectAllBabysitters = document.getElementById('selectProfileBabysitter');
                 const selectCreateChat = document.getElementById('selectCreateChat');
-                yield this.sendMessageFunction();
+                yield this.loadUsersForsendMessageFunction();
                 const chats = yield this.getAllChatsFunction();
                 for (const chat of chats.chats) {
                     socketVariable.emit('joinChat', chat.idChat);
@@ -237,13 +238,7 @@ export const AsyncFunctions = {
                     headers: funcitons.header(token)
                 });
                 const dataBabysitter = yield response.json();
-                dataBabysitter.babysitters.forEach((babysitter) => {
-                    const option = document.createElement('option');
-                    option.value = babysitter.idUser;
-                    option.innerHTML = `[idBabysitter: ${babysitter.idUser}]`;
-                    selectAllBabysitters.appendChild(option);
-                    selectCreateChat.appendChild(option.cloneNode(true));
-                });
+                funcitons.createOptionBabysitter(dataBabysitter);
                 const user = yield this.getUser();
                 if (user.babysitter !== null) {
                     const selectParentProfile = document.getElementById('selectParentProfile');
@@ -263,16 +258,17 @@ export const AsyncFunctions = {
             }
         });
     },
+    // Create html tag
     createImgProfile(user) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
+                console.log(user);
                 const divImgProfile = document.getElementById('imgProfile');
                 const selectImg = document.getElementById('imgProfileElement');
                 if (selectImg) {
                     selectImg.remove();
                 }
-                console.log(divImgProfile);
-                if (!divImgProfile) {
+                if (divImgProfile === null || divImgProfile === undefined) {
                     return;
                 }
                 yield fetch(`http://localhost:3000/api${user.user.imgProfile}`, {
@@ -296,6 +292,7 @@ export const AsyncFunctions = {
             }
         });
     },
+    // Update profile picture
     profileImg(file) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -317,5 +314,46 @@ export const AsyncFunctions = {
             }
         });
     },
+    // update profile
+    createUpdateProfileFields() {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c, _d, _e, _f, _g, _h, _j;
+            try {
+                document.getElementById('firstName').value = '';
+                document.getElementById('lastName').value = '';
+                document.getElementById('address').value = '';
+                document.getElementById('city').value = '';
+                document.getElementById('postalCode').value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('children').value = '';
+                document.getElementById('rate').value = '';
+                // (document.getElementById('availabilities') as HTMLInputElement).value = '';
+                const user = yield this.getUser();
+                const u = user.user;
+                document.getElementById('firstName').value = (_a = u.firstName) !== null && _a !== void 0 ? _a : '';
+                document.getElementById('lastName').value = (_b = u.lastName) !== null && _b !== void 0 ? _b : '';
+                document.getElementById('address').value = (_c = u.address) !== null && _c !== void 0 ? _c : '';
+                document.getElementById('city').value = (_d = u.city) !== null && _d !== void 0 ? _d : '';
+                document.getElementById('postalCode').value = (_e = u.postalCode) !== null && _e !== void 0 ? _e : '';
+                document.getElementById('description').value = (_f = u.description) !== null && _f !== void 0 ? _f : '';
+                if (user.user.parent !== null) {
+                    document.getElementById('children').value = (_g = u.parent.children) !== null && _g !== void 0 ? _g : '';
+                }
+                else {
+                    document.getElementById('rate').value = (_h = u.babysitter.rate) !== null && _h !== void 0 ? _h : '';
+                    document.getElementById('availabilities').value = (_j = u.babysitter.availability) !== null && _j !== void 0 ? _j : '';
+                }
+            }
+            catch (error) {
+                console.error(error);
+                throw new Error(error);
+            }
+        });
+    },
+    // Sent data for update profile
+    updateProfile(firstName, lastName, address, city, postalCode, description, children, rate) {
+        return __awaiter(this, void 0, void 0, function* () {
+        });
+    }
 };
 //# sourceMappingURL=asyncFunctions.js.map

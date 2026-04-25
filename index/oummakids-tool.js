@@ -29,7 +29,7 @@ const getParentProfile = document.getElementById('parentProfile');
 const sendMessage = document.getElementById('sendMessage');
 const inputImg = document.getElementById('inputImg');
 const imgProfileBtn = document.getElementById('imgProfileBtn');
-const sectionUpdate = document.getElementById('section-update');
+const updateProfileBtn = document.getElementById('updateProfileBtn');
 // Variables
 let numParent = 1;
 let numBabysitter = 1;
@@ -333,11 +333,7 @@ createChat === null || createChat === void 0 ? void 0 : createChat.addEventListe
         if (response.ok || (response.status === 201)) {
             console.log('Dans le mille émile!');
             console.log(data);
-            const selectSendMessage = document.getElementById('selectSendMessage');
-            const option = document.createElement('option');
-            option.value = data.chat.chat.idChat;
-            option.innerHTML = `idBabysitter: ${id}`;
-            selectSendMessage === null || selectSendMessage === void 0 ? void 0 : selectSendMessage.appendChild(option);
+            funcitons.createChat(data, id);
             socketVariable.emit('joinChat', { idChat: data.chat.chat.idChat });
         }
         else {
@@ -371,8 +367,16 @@ imgProfileBtn === null || imgProfileBtn === void 0 ? void 0 : imgProfileBtn.addE
     console.log(AsyncFunctions.profileImg(file));
     return;
 }));
-// fetch("/upload", {
-//   method: "POST",
-//   body: formData
-// });
+updateProfileBtn === null || updateProfileBtn === void 0 ? void 0 : updateProfileBtn.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
+    const firstName = document.getElementById('firstName');
+    const lastName = document.getElementById('lastName');
+    const address = document.getElementById('address');
+    const city = document.getElementById('city');
+    const postalCode = document.getElementById('postalCode');
+    const description = document.getElementById('description');
+    const children = document.getElementById('children');
+    const rate = document.getElementById('rate');
+    // const availabilities = document.getElementById('availabilities') as HTMLInputElement;
+    yield AsyncFunctions.updateProfile(firstName.value, lastName.value, address.value, city.value, postalCode.value, description.value, Number(children.value), Number(rate.value));
+}));
 //# sourceMappingURL=oummakids-tool.js.map

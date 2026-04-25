@@ -14,14 +14,48 @@
 
     <main>
         <section class="section-img-profile">
-            <div id="imgProfile"></div>
+            <div id="div-img-profile"></div>
             <h1>Login</h1>
             <select id="selectLogin">
                 <option value="admin@test.com password123">Admin</option>
             </select>
             <button id="Login">Login</button>
 
-            <div class="div-update-profile"></div>
+            <div class="div- update-profile">
+                <form method="PUT">
+                    <label for="firstName">First name</label>
+                    <input type="text" name="firstName" id="firstName">
+
+                    <label for="lastName">Last name</label>
+                    <input type="text" name="lastName" id="lastName">
+
+                    <label for="address">Address</label>
+                    <input type="text" name="address" id="address">
+
+                    <label for="city">City</label>
+                    <input type="text" name="city" id="city">
+
+                    <label for="postalCode">Postal code</label>
+                    <input type="text" name="postatCode" id="postalCode">
+
+                    <label for="description">Description</label>
+                    <input type="text" name="description" id="description">
+
+                    <div id="div-parent-update-field">
+                        <label for="children">Children</label>
+                        <input type="number" name="children" id="children">
+                    </div>
+
+                    <div id="div-babysitter-upadate-fields">
+                        <label for="rate">rate</label>
+                        <input type="number" name="rate" id="rate">
+                    </div>
+
+                    <div id="div-babysitter-upadate-fields"></div>
+                    <!-- faire le champ favoris -->
+                    <button id="updateProfileBtn">Update</button>
+                </form>
+            </div>
         </section>
 
         <section class="section-admin">

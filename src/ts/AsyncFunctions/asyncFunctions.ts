@@ -24,7 +24,7 @@ export const AsyncFunctions = {
             console.error(error);
         }
     },
-    
+
     async getAllChatsFunction() {
         try {
             const select = document.getElementById('selectChat') as HTMLSelectElement;
@@ -53,7 +53,7 @@ export const AsyncFunctions = {
                     selectDeleteChat.appendChild(optionDelete);
                 });
                 console.log(chats);
-                return chats;
+
 
             } else if (response.ok && (user.babysitter !== null)) {
                 chats.chats.forEach((chat: any) => {
@@ -67,10 +67,9 @@ export const AsyncFunctions = {
                     selectDeleteChat.appendChild(optionDelete);
                 });
                 console.log(chats);
-                return chats;
             }
 
-            return;
+            return chats;
 
         } catch (error: any) {
             console.error(error)
@@ -206,6 +205,7 @@ export const AsyncFunctions = {
                 }
 
                 await this.loadHtmlElement();
+                await this.createUpdateProfileFields();
                 return;
             } else {
                 console.error("Erreur HTTP", response.status, data);
@@ -261,14 +261,14 @@ export const AsyncFunctions = {
     // Create html tag
     async createImgProfile(user: any): Promise<void> {
         try {
+            console.log(user);
+
             const divImgProfile = document.getElementById('imgProfile') as HTMLDivElement;
             const selectImg = document.getElementById('imgProfileElement') as HTMLImageElement;
             if (selectImg) {
                 selectImg.remove();
             }
-            console.log(divImgProfile);
-            
-            if (!divImgProfile) {
+            if (divImgProfile === null || divImgProfile === undefined) {
                 return;
             }
             await fetch(`http://localhost:3000/api${user.user.imgProfile}`, {
@@ -313,4 +313,53 @@ export const AsyncFunctions = {
             console.error(error);
         }
     },
+    // update profile
+    async createUpdateProfileFields(): Promise<void> {
+        try {
+            (document.getElementById('firstName') as HTMLInputElement).value= '';
+            (document.getElementById('lastName') as HTMLInputElement).value = '';
+            (document.getElementById('address') as HTMLInputElement).value = '';
+            (document.getElementById('city') as HTMLInputElement).value = '';
+            (document.getElementById('postalCode') as HTMLInputElement).value = '';
+            (document.getElementById('description') as HTMLInputElement).value = '';
+            (document.getElementById('children') as HTMLInputElement).value = '';
+            (document.getElementById('rate') as HTMLInputElement).value = '';
+            // (document.getElementById('availabilities') as HTMLInputElement).value = '';
+            const user = await this.getUser();
+
+            const u = user.user;
+            (document.getElementById('firstName') as HTMLInputElement).value = u.firstName ?? '';
+            (document.getElementById('lastName') as HTMLInputElement).value = u.lastName ?? '';
+            (document.getElementById('address') as HTMLInputElement).value = u.address ?? '';
+            (document.getElementById('city') as HTMLInputElement).value = u.city ?? '';
+            (document.getElementById('postalCode') as HTMLInputElement).value = u.postalCode ?? '';
+            (document.getElementById('description') as HTMLInputElement).value = u.description ?? '';
+
+            if (user.user.parent !== null) {
+                (document.getElementById('children') as HTMLInputElement).value = u.parent.children ?? '';
+            } else {
+                (document.getElementById('rate') as HTMLInputElement).value = u.babysitter.rate ?? '';
+                (document.getElementById('availabilities') as HTMLInputElement).value = u.babysitter.availability ?? '';
+            }
+
+        } catch (error: any) {
+            console.error(error);
+            throw new Error(error);
+        }
+
+    },
+    // Sent data for update profile
+    async updateProfile(
+        firstName: string, 
+        lastName: string, 
+        address: string,
+        city: string,
+        postalCode: string,
+        description: string,
+        children?: number,
+        rate?: number,
+        // availability?: any[]
+    ) {
+        
+    }
 }

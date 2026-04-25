@@ -2,26 +2,26 @@ import { AsyncFunctions, socketVariable, token } from "../src/ts/AsyncFunctions/
 import { funcitons } from "../src/ts/functions/functions.js";
 
 // Constantes
-const addBabysitter = document.getElementById('addBabysitter') as HTMLSelectElement;
-const addParent = document.getElementById('addParent') as HTMLSelectElement;
-const getProfile = document.getElementById('getProfile') as HTMLSelectElement;
-const createChat = document.getElementById('createChat') as HTMLSelectElement;
-const deleteUser = document.getElementById('deleteUser') as HTMLSelectElement;
+const addBabysitter = document.getElementById('addBabysitter') as HTMLButtonElement;
+const addParent = document.getElementById('addParent') as HTMLButtonElement;
+const getProfile = document.getElementById('getProfile') as HTMLButtonElement;
+const createChat = document.getElementById('createChat') as HTMLButtonElement;
+const deleteUser = document.getElementById('deleteUser') as HTMLButtonElement;
 const selectAllUsers = document.getElementById('selectAllUsers') as HTMLSelectElement;
 const selectAllBabysitters = document.getElementById('selectAllBabysitters') as HTMLSelectElement;
 const selectAllParents = document.getElementById('selectAllParents') as HTMLSelectElement;
-const getProfileBabysitter = document.getElementById('getProfileBabysitter') as HTMLSelectElement;
-const incrementParent = document.getElementById('incrementParent') as HTMLSelectElement;
-const incrementBabysitter = document.getElementById('incrementBabysitter') as HTMLSelectElement;
-const deleteChat = document.getElementById('deleteChat') as HTMLSelectElement;
-const getAllChats = document.getElementById('getAllChats') as HTMLSelectElement;
-const getChat = document.getElementById('getChat') as HTMLSelectElement;
-const Login = document.getElementById('Login') as HTMLSelectElement;
-const getParentProfile = document.getElementById('parentProfile') as HTMLSelectElement;
-const sendMessage = document.getElementById('sendMessage') as HTMLSelectElement;
+const getProfileBabysitter = document.getElementById('getProfileBabysitter') as HTMLButtonElement;
+const incrementParent = document.getElementById('incrementParent') as HTMLButtonElement;
+const incrementBabysitter = document.getElementById('incrementBabysitter') as HTMLButtonElement;
+const deleteChat = document.getElementById('deleteChat') as HTMLButtonElement;
+const getAllChats = document.getElementById('getAllChats') as HTMLButtonElement;
+const getChat = document.getElementById('getChat') as HTMLButtonElement;
+const Login = document.getElementById('Login') as HTMLButtonElement;
+const getParentProfile = document.getElementById('parentProfile') as HTMLButtonElement;
+const sendMessage = document.getElementById('sendMessage') as HTMLButtonElement;
 const inputImg = document.getElementById('inputImg') as HTMLInputElement;
-const imgProfileBtn = document.getElementById('imgProfileBtn') as HTMLSelectElement;
-const sectionUpdate = document.getElementById('section-update') as HTMLImageElement;
+const imgProfileBtn = document.getElementById('imgProfileBtn') as HTMLButtonElement;
+const updateProfileBtn = document.getElementById('updateProfileBtn') as HTMLButtonElement;
 
 // Variables
 let numParent = 1;
@@ -355,4 +355,18 @@ imgProfileBtn?.addEventListener('click', async (e) => {
     }
     console.log(AsyncFunctions.profileImg(file));
     return;
+});
+
+updateProfileBtn?.addEventListener('click', async () => {
+    const firstName = document.getElementById('firstName') as HTMLInputElement;
+    const lastName = document.getElementById('lastName') as HTMLInputElement;
+    const address = document.getElementById('address') as HTMLInputElement;
+    const city = document.getElementById('city') as HTMLInputElement;
+    const postalCode = document.getElementById('postalCode') as HTMLInputElement;
+    const description = document.getElementById('description') as HTMLInputElement;
+    const children = document.getElementById('children') as HTMLInputElement;
+    const rate = document.getElementById('rate') as HTMLInputElement;
+    // const availabilities = document.getElementById('availabilities') as HTMLInputElement;
+
+    await AsyncFunctions.updateProfile(firstName.value, lastName.value, address.value, city.value, postalCode.value, description.value, Number(children.value), Number(rate.value));
 });
