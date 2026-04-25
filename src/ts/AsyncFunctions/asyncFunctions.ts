@@ -24,6 +24,7 @@ export const AsyncFunctions = {
             console.error(error);
         }
     },
+    
     async getAllChatsFunction() {
         try {
             const select = document.getElementById('selectChat') as HTMLSelectElement;
@@ -75,6 +76,7 @@ export const AsyncFunctions = {
             console.error(error)
         }
     },
+
     async getAllBabysitters(): Promise<any> {
         try {
             const response: Response = await fetch('http://localhost:3000/api/babysitters', {
@@ -93,7 +95,8 @@ export const AsyncFunctions = {
             console.error(error)
         }
     },
-    async sendMessageFunction(): Promise<void> {
+
+    async loadUsersForsendMessageFunction(): Promise<void> {
         try {
             const select = document.getElementById('selectSendMessage') as HTMLSelectElement;
 
@@ -124,6 +127,7 @@ export const AsyncFunctions = {
             console.error(error)
         }
     },
+    // Generate the 3 first user who be charged with fixtures (back-end side)
     async loginGeneratedUsers(): Promise<void> {
         try {
             const select = document.getElementById('selectLogin') as HTMLSelectElement;
@@ -157,6 +161,7 @@ export const AsyncFunctions = {
             console.error(error);
         }
     },
+
     async login(): Promise<void> {
         try {
             const select = document.getElementById('selectLogin') as HTMLSelectElement;
@@ -212,13 +217,13 @@ export const AsyncFunctions = {
         }
     },
 
-
+    // Load all element in selector
     async loadHtmlElement() {
         try {
             const selectAllBabysitters = document.getElementById('selectProfileBabysitter') as HTMLSelectElement;
             const selectCreateChat = document.getElementById('selectCreateChat') as HTMLSelectElement;
 
-            await this.sendMessageFunction();
+            await this.loadUsersForsendMessageFunction();
 
             const chats = await this.getAllChatsFunction();
 
@@ -261,7 +266,7 @@ export const AsyncFunctions = {
             console.error(error);
         }
     },
-
+    // Create html tag
     async createImgProfile(user: any): Promise<void> {
         try {
             const divImgProfile = document.getElementById('imgProfile') as HTMLDivElement;
@@ -294,6 +299,7 @@ export const AsyncFunctions = {
         }
     },
 
+    // Update profile picture
     async profileImg(file: File): Promise<void> {
         try {
             const formData: FormData = new FormData();

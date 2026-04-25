@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="./index/oummakids-tool.css">
+    <script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
+    <script src="./index/oummakids-tool.js" type="module" defer></script>
+    <title>Tools-babysitter</title>
+</head>
+
+<body>
+
+    <main>
+        <section class="section-img-profile">
+            <div id="imgProfile"></div>
+            <h1>Login</h1>
+            <select id="selectLogin">
+                <option value="admin@test.com password123">Admin</option>
+            </select>
+            <button id="Login">Login</button>
+        </section>
+
+        <section class="section-admin">
+            <h2>Admin routes</h2>
+            <div class="row">
+                <button id="selectAllUsers">Get all users</button>
+
+
+                <button id="selectAllParents">Select all parents</button>
+
+
+                <button id="addBabysitter">Babys +1</button>
+
+
+                <button id="addParent">Parent +1</button>
+
+
+                <button id="incrementBabysitter">Increment Babysitter</button>
+
+
+                <button id="incrementParent">incrementParent</button>
+            </div>
+
+
+
+        </section>
+        <section class="section-user">
+            <div class="div-user">
+                <h2>Parents Routes</h2>
+                <div class="row">
+                    <button id="getProfile">Get profile</button>
+
+                    <button id="selectAllBabysitters">Select all babysitters</button>
+                    <button id="getAllChats">Get all chats</button>
+                    <div>
+                        <button id="getProfileBabysitter">Get profile babysitter</button>
+                        <select id="selectProfileBabysitter">
+                        </select>
+                    </div>
+
+                    <div>
+                        <button id="createChat">Create Chat</button>
+                        <select id="selectCreateChat">
+                        </select>
+                    </div>
+
+
+                    <div>
+                        <button id="getChat">Get chat</button>
+                        <select id="selectChat">
+                        </select>
+                    </div>
+
+                    <div>
+                        <button id="deleteChat">Delete chat</button>
+                        <select id="selectDeleteChat">
+                        </select>
+                    </div>
+                    <div>
+                        <button id="parentProfile">Get parent profile</button>
+                        <select id="selectParentProfile">
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="">
+                <div class="message">
+                    <select id="selectSendMessage">
+                    </select>
+                    <input type="text" id="inputSendMessage" class="inputSendMessage">
+                    <button id="sendMessage">Send message</button>
+                </div>
+            </div>
+
+
+        </section>
+
+
+
+
+        <section class="section-update" id="section-update">
+            <div>
+                <h3>Update profile image</h3>
+                <form method="post" enctype="multipart/form-data">
+                    <label for="inputImg">Chosse a picture:</label>
+                    <input name="inputImg" id="inputImg" type="file" accept=".jpg, .jpeg, .pnj">
+                </form>
+                <button id="imgProfileBtn">Update img</button>
+            </div>
+        </section>
+    </main>
+</body>
+
+</html>

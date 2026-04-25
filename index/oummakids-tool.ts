@@ -22,6 +22,7 @@ const sendMessage = document.getElementById('sendMessage') as HTMLSelectElement;
 const inputImg = document.getElementById('inputImg') as HTMLInputElement;
 const imgProfileBtn = document.getElementById('imgProfileBtn') as HTMLSelectElement;
 const sectionUpdate = document.getElementById('section-update') as HTMLImageElement;
+
 // Variables
 let numParent = 1;
 let numBabysitter = 1;
@@ -360,9 +361,3 @@ imgProfileBtn?.addEventListener('click', async (e) => {
     console.log(AsyncFunctions.profileImg(file));
     return;
 });
-
-
-// fetch("/upload", {
-//   method: "POST",
-//   body: formData
-// });
