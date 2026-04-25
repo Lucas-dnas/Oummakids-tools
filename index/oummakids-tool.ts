@@ -325,12 +325,7 @@ createChat?.addEventListener('click', async (e) => {
         if (response.ok || (response.status === 201)) {
             console.log('Dans le mille émile!');
             console.log(data);
-            const selectSendMessage = document.getElementById('selectSendMessage');
-            const option = document.createElement('option');
-            option.value = data.chat.chat.idChat;
-            option.innerHTML = `idBabysitter: ${id}`
-            selectSendMessage?.appendChild(option);
-
+            funcitons.createChat(data, id);
             socketVariable.emit('joinChat', { idChat: data.chat.chat.idChat });
         } else {
             console.error("Error HTTP", response.status);

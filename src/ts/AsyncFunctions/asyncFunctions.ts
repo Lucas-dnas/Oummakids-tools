@@ -36,7 +36,7 @@ export const AsyncFunctions = {
             const response: Response = await fetch('http://localhost:3000/api/profile/chats', {
                 method: "GET",
                 headers: funcitons.header(token),
-            });
+            }!);
 
             const chats: any = await response.json();
             const user: any = await this.getUser();
@@ -81,7 +81,7 @@ export const AsyncFunctions = {
         try {
             const response: Response = await fetch('http://localhost:3000/api/babysitters', {
                 method: "GET",
-                headers: funcitons.header(token)
+                headers: funcitons.header(token)!
             });
             const data: any = await response.json();
             if (response.ok) {
@@ -131,7 +131,7 @@ export const AsyncFunctions = {
     async loginGeneratedUsers(): Promise<void> {
         try {
             const select = document.getElementById('selectLogin') as HTMLSelectElement;
-            const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: funcitons.header(token) });
+            const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: funcitons.header(token)! });
             const data: any = await response.json();
 
             if (response.ok) {
@@ -207,7 +207,6 @@ export const AsyncFunctions = {
 
                 await this.loadHtmlElement();
                 return;
-
             } else {
                 console.error("Erreur HTTP", response.status, data);
                 return;
@@ -238,14 +237,7 @@ export const AsyncFunctions = {
                 headers: funcitons.header(token)
             });
             const dataBabysitter: any = await response.json();
-            dataBabysitter.babysitters.forEach((babysitter: any) => {
-                const option = document.createElement('option');
-                option.value = babysitter.idUser;
-                option.innerHTML = `[idBabysitter: ${babysitter.idUser}]`;
-                selectAllBabysitters.appendChild(option);
-                selectCreateChat.appendChild(option.cloneNode(true));
-
-            });
+            funcitons.createOptionBabysitter(dataBabysitter);
 
             const user: any = await this.getUser();
             if (user.babysitter !== null) {
