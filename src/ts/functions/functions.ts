@@ -18,5 +18,4 @@ export const funcitons = {
         option.value = user + '@test.com password123';
         return option;
     },
-
 }
