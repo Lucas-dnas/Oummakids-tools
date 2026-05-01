@@ -1,5 +1,5 @@
 import { funcitons } from "../functions/functions.js";
-
+// import { io } from "socket.io-client";
 export let token: string;
 export let socketVariable: any;
 declare const io: any;
@@ -316,7 +316,7 @@ export const AsyncFunctions = {
     // update profile
     async createUpdateProfileFields(): Promise<void> {
         try {
-            (document.getElementById('firstName') as HTMLInputElement).value= '';
+            (document.getElementById('firstName') as HTMLInputElement).value = '';
             (document.getElementById('lastName') as HTMLInputElement).value = '';
             (document.getElementById('address') as HTMLInputElement).value = '';
             (document.getElementById('city') as HTMLInputElement).value = '';
@@ -350,8 +350,8 @@ export const AsyncFunctions = {
     },
     // Sent data for update profile
     async updateProfile(
-        firstName: string, 
-        lastName: string, 
+        firstName: string,
+        lastName: string,
         address: string,
         city: string,
         postalCode: string,
@@ -360,6 +360,6 @@ export const AsyncFunctions = {
         rate?: number,
         // availability?: any[]
     ) {
-        
+
     }
 }

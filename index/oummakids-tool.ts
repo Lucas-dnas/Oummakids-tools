@@ -22,6 +22,8 @@ const sendMessage = document.getElementById('sendMessage') as HTMLButtonElement;
 const inputImg = document.getElementById('inputImg') as HTMLInputElement;
 const imgProfileBtn = document.getElementById('imgProfileBtn') as HTMLButtonElement;
 const updateProfileBtn = document.getElementById('updateProfileBtn') as HTMLButtonElement;
+const forgotBtn = document.getElementById('forgotBtn') as HTMLButtonElement;
+const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
 
 // Variables
 let numParent = 1;
@@ -299,8 +301,6 @@ sendMessage?.addEventListener('click', async (e) => {
         const select = document.getElementById('selectSendMessage') as HTMLSelectElement;
         const input = document.getElementById('inputSendMessage') as HTMLSelectElement;
 
-        const user = await AsyncFunctions.getUser();
-
         socketVariable.emit('sendMessage', {
             content: input.value,
             idChat: Number(select.value)
@@ -310,6 +310,7 @@ sendMessage?.addEventListener('click', async (e) => {
         console.log(error);
     }
 });
+
 // PARENT: Create chat
 createChat?.addEventListener('click', async (e) => {
     e.preventDefault();
@@ -357,7 +358,23 @@ imgProfileBtn?.addEventListener('click', async (e) => {
     return;
 });
 
-updateProfileBtn?.addEventListener('click', async () => {
+forgotBtn?.addEventListener('click', async (e) => {
+    e.preventDefault();
+    const email = document.getElementById('email') as HTMLInputElement;
+    console.log(email.value);
+    
+    const response: Response = await fetch('http://localhost:3000/api/recovery/password', {
+        method: "POST",
+        headers: funcitons.header(token),
+        body: JSON.stringify({
+            email: email.value //----------------------------------//
+        })
+    });
+    const data: string = await response.json();
+    console.log(data);
+    
+})
+updateProfileBtn?.addEventListener('click', async () => { // not done yet, don't work !!
     const firstName = document.getElementById('firstName') as HTMLInputElement;
     const lastName = document.getElementById('lastName') as HTMLInputElement;
     const address = document.getElementById('address') as HTMLInputElement;
