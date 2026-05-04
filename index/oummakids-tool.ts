@@ -1,5 +1,5 @@
 import { AsyncFunctions, socketVariable, token } from "../src/ts/AsyncFunctions/asyncFunctions.js";
-import { funcitons } from "../src/ts/functions/functions.js";
+import { functions } from "../src/ts/functions/functions.js";
 
 // Constantes
 const addBabysitter = document.getElementById('addBabysitter') as HTMLButtonElement;
@@ -23,7 +23,6 @@ const inputImg = document.getElementById('inputImg') as HTMLInputElement;
 const imgProfileBtn = document.getElementById('imgProfileBtn') as HTMLButtonElement;
 const updateProfileBtn = document.getElementById('updateProfileBtn') as HTMLButtonElement;
 const forgotBtn = document.getElementById('forgotBtn') as HTMLButtonElement;
-const resetBtn = document.getElementById('resetBtn') as HTMLButtonElement;
 
 // Variables
 let numParent = 1;
@@ -121,7 +120,7 @@ getProfile?.addEventListener('click', async (e) => {
     try {
         const response = await fetch('http://localhost:3000/api/profile', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const profile = await response.json();
 
@@ -143,7 +142,7 @@ getProfileBabysitter?.addEventListener('click', async (e) => {
         const id: number = Number(select.value);
         const response: Response = await fetch(`http://localhost:3000/api/babysitters/${id}`, {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data: JSON = await response.json();
         if (response.ok) {
@@ -169,7 +168,7 @@ getChat?.addEventListener('click', async (e) => {
 
         const response: Response = await fetch(`http://localhost:3000/api/profile/chats/${id}`, {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const chat: JSON = await response.json();
         if (response.ok) {
@@ -189,7 +188,7 @@ getParentProfile?.addEventListener('click', async (e) => {
         const id: number = Number(select?.value);
 
         const response: Response = await fetch(`http://localhost:3000/api/parent/${id}`, {
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
 
         const data: any = await response.json();
@@ -210,7 +209,7 @@ deleteUser?.addEventListener('click', async (e) => {
     try {
         const response: Response = await fetch('http://localhost:3000/api/profile', {
             method: "DELETE",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         if (response.status === 204) {
             console.log("You died");
@@ -232,7 +231,7 @@ deleteChat?.addEventListener('click', async (e) => {
         }
         const response: Response = await fetch(`http://localhost:3000/api/profile/chats/${id}`, {
             method: "DELETE",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         if (response.status === 204) {
             console.log("Chat killed!");
@@ -252,7 +251,7 @@ selectAllParents?.addEventListener('click', async (e) => {
 
         const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllParents', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data: JSON = await response.json();
         if (response.ok) {
@@ -275,7 +274,7 @@ selectAllUsers?.addEventListener('click', async (e) => {
     try {
         const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data: JSON = await response.json();
         if (response.ok) {
@@ -319,14 +318,14 @@ createChat?.addEventListener('click', async (e) => {
         const id: number = Number(select?.value);
         const response: Response = await fetch(`http://localhost:3000/api/profile/chats/${id}`, {
             method: "POST",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
 
         const data = await response.json();
         if (response.ok || (response.status === 201)) {
             console.log('Dans le mille émile!');
             console.log(data);
-            funcitons.createChat(data, id);
+            functions.createChat(data, id);
             socketVariable.emit('joinChat', { idChat: data.chat.chat.idChat });
         } else {
             console.error("Error HTTP", response.status);
@@ -336,15 +335,16 @@ createChat?.addEventListener('click', async (e) => {
     }
 });
 // Modification of img profile
+
 let file: File | undefined;
 inputImg?.addEventListener('change', (e) => {
     e.preventDefault();
-    file = inputImg.files?.[0];
+    file = inputImg.files?.[ 0 ];
     console.log(file);
 });
 inputImg?.addEventListener('dragover', (e) => {
     e.preventDefault();
-    file = inputImg.files?.[0];
+    file = inputImg.files?.[ 0 ];
     console.log(file);
 });
 
@@ -360,20 +360,20 @@ imgProfileBtn?.addEventListener('click', async (e) => {
 
 forgotBtn?.addEventListener('click', async (e) => {
     e.preventDefault();
-    const email = document.getElementById('email') as HTMLInputElement;
-    console.log(email.value);
-    
-    const response: Response = await fetch('http://localhost:3000/api/recovery/password', {
+    const email = document.getElementById('emailRecovery') as HTMLInputElement;
+
+    const response: Response = await fetch('http://localhost:3000/api/auth/recovery/password', {
         method: "POST",
-        headers: funcitons.header(token),
+        headers: functions.header(null),
         body: JSON.stringify({
-            email: email.value //----------------------------------//
+            email: email.value
         })
     });
     const data: string = await response.json();
     console.log(data);
-    
-})
+
+});
+
 updateProfileBtn?.addEventListener('click', async () => { // not done yet, don't work !!
     const firstName = document.getElementById('firstName') as HTMLInputElement;
     const lastName = document.getElementById('lastName') as HTMLInputElement;

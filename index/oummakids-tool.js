@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { AsyncFunctions, socketVariable, token } from "../src/ts/AsyncFunctions/asyncFunctions.js";
-import { funcitons } from "../src/ts/functions/functions.js";
+import { functions } from "../src/ts/functions/functions.js";
 // Constantes
 const addBabysitter = document.getElementById('addBabysitter');
 const addParent = document.getElementById('addParent');
@@ -30,6 +30,7 @@ const sendMessage = document.getElementById('sendMessage');
 const inputImg = document.getElementById('inputImg');
 const imgProfileBtn = document.getElementById('imgProfileBtn');
 const updateProfileBtn = document.getElementById('updateProfileBtn');
+const forgotBtn = document.getElementById('forgotBtn');
 // Variables
 let numParent = 1;
 let numBabysitter = 1;
@@ -122,7 +123,7 @@ getProfile === null || getProfile === void 0 ? void 0 : getProfile.addEventListe
     try {
         const response = yield fetch('http://localhost:3000/api/profile', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const profile = yield response.json();
         if (response.ok) {
@@ -145,7 +146,7 @@ getProfileBabysitter === null || getProfileBabysitter === void 0 ? void 0 : getP
         const id = Number(select.value);
         const response = yield fetch(`http://localhost:3000/api/babysitters/${id}`, {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data = yield response.json();
         if (response.ok) {
@@ -172,7 +173,7 @@ getChat === null || getChat === void 0 ? void 0 : getChat.addEventListener('clic
         const id = Number(select === null || select === void 0 ? void 0 : select.value);
         const response = yield fetch(`http://localhost:3000/api/profile/chats/${id}`, {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const chat = yield response.json();
         if (response.ok) {
@@ -193,7 +194,7 @@ getParentProfile === null || getParentProfile === void 0 ? void 0 : getParentPro
         const select = document.getElementById('selectParentProfile');
         const id = Number(select === null || select === void 0 ? void 0 : select.value);
         const response = yield fetch(`http://localhost:3000/api/parent/${id}`, {
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data = yield response.json();
         if (response.ok) {
@@ -214,7 +215,7 @@ deleteUser === null || deleteUser === void 0 ? void 0 : deleteUser.addEventListe
     try {
         const response = yield fetch('http://localhost:3000/api/profile', {
             method: "DELETE",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         if (response.status === 204) {
             console.log("You died");
@@ -238,7 +239,7 @@ deleteChat === null || deleteChat === void 0 ? void 0 : deleteChat.addEventListe
         }
         const response = yield fetch(`http://localhost:3000/api/profile/chats/${id}`, {
             method: "DELETE",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         if (response.status === 204) {
             console.log("Chat killed!");
@@ -258,7 +259,7 @@ selectAllParents === null || selectAllParents === void 0 ? void 0 : selectAllPar
     try {
         const response = yield fetch('http://localhost:3000/api/profile/admin/getAllParents', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data = yield response.json();
         if (response.ok) {
@@ -283,7 +284,7 @@ selectAllUsers === null || selectAllUsers === void 0 ? void 0 : selectAllUsers.a
     try {
         const response = yield fetch('http://localhost:3000/api/profile/admin/getAllUsers', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data = yield response.json();
         if (response.ok) {
@@ -309,7 +310,6 @@ sendMessage === null || sendMessage === void 0 ? void 0 : sendMessage.addEventLi
     try {
         const select = document.getElementById('selectSendMessage');
         const input = document.getElementById('inputSendMessage');
-        const user = yield AsyncFunctions.getUser();
         socketVariable.emit('sendMessage', {
             content: input.value,
             idChat: Number(select.value)
@@ -327,13 +327,13 @@ createChat === null || createChat === void 0 ? void 0 : createChat.addEventListe
         const id = Number(select === null || select === void 0 ? void 0 : select.value);
         const response = yield fetch(`http://localhost:3000/api/profile/chats/${id}`, {
             method: "POST",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data = yield response.json();
         if (response.ok || (response.status === 201)) {
             console.log('Dans le mille émile!');
             console.log(data);
-            funcitons.createChat(data, id);
+            functions.createChat(data, id);
             socketVariable.emit('joinChat', { idChat: data.chat.chat.idChat });
         }
         else {
@@ -366,6 +366,19 @@ imgProfileBtn === null || imgProfileBtn === void 0 ? void 0 : imgProfileBtn.addE
     }
     console.log(AsyncFunctions.profileImg(file));
     return;
+}));
+forgotBtn === null || forgotBtn === void 0 ? void 0 : forgotBtn.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
+    e.preventDefault();
+    const email = document.getElementById('emailRecovery');
+    const response = yield fetch('http://localhost:3000/api/auth/recovery/password', {
+        method: "POST",
+        headers: functions.header(null),
+        body: JSON.stringify({
+            email: email.value
+        })
+    });
+    const data = yield response.json();
+    console.log(data);
 }));
 updateProfileBtn === null || updateProfileBtn === void 0 ? void 0 : updateProfileBtn.addEventListener('click', () => __awaiter(void 0, void 0, void 0, function* () {
     const firstName = document.getElementById('firstName');

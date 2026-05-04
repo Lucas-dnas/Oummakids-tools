@@ -1,4 +1,4 @@
-import { funcitons } from "../functions/functions.js";
+import { functions } from "../functions/functions.js";
 // import { io } from "socket.io-client";
 export let token: string;
 export let socketVariable: any;
@@ -10,7 +10,7 @@ export const AsyncFunctions = {
         try {
             const response = await fetch('http://localhost:3000/api/profile', {
                 method: "GET",
-                headers: funcitons.header(token)
+                headers: functions.header(token)
             });
             const profile: any = await response.json();
 
@@ -35,7 +35,7 @@ export const AsyncFunctions = {
 
             const response: Response = await fetch('http://localhost:3000/api/profile/chats', {
                 method: "GET",
-                headers: funcitons.header(token),
+                headers: functions.header(token),
             }!);
 
             const chats: any = await response.json();
@@ -80,7 +80,7 @@ export const AsyncFunctions = {
         try {
             const response: Response = await fetch('http://localhost:3000/api/babysitters', {
                 method: "GET",
-                headers: funcitons.header(token)!
+                headers: functions.header(token)!
             });
             const data: any = await response.json();
             if (response.ok) {
@@ -130,15 +130,15 @@ export const AsyncFunctions = {
     async loginGeneratedUsers(): Promise<void> {
         try {
             const select = document.getElementById('selectLogin') as HTMLSelectElement;
-            const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: funcitons.header(token)! });
+            const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: functions.header(token)! });
             const data: any = await response.json();
 
             if (response.ok) {
                 console.log(data);
                 select.innerHTML = '<option value="">-- Sélectionner un user pour se login --</option>';
-                const admin = funcitons.loadThreeFirstUsersCredentials('admin');
-                const parent = funcitons.loadThreeFirstUsersCredentials('parent');
-                const babysitter = funcitons.loadThreeFirstUsersCredentials('babysitter');
+                const admin = functions.loadThreeFirstUsersCredentials('admin');
+                const parent = functions.loadThreeFirstUsersCredentials('parent');
+                const babysitter = functions.loadThreeFirstUsersCredentials('babysitter');
 
                 for (const element of [admin, parent, babysitter]) {
                     select.appendChild(element);
@@ -183,7 +183,7 @@ export const AsyncFunctions = {
                 console.log("Yessir! Good Sir! 🫡");
                 console.log(data);
                 token = data.user.token;
-                funcitons.header(token)
+                functions.header(token)
                 const socket = io("http://localhost:3000", {
                     auth: {
                         token: token
@@ -234,10 +234,10 @@ export const AsyncFunctions = {
 
             const response: Response = await fetch('http://localhost:3000/api/babysitters', {
                 method: "GET",
-                headers: funcitons.header(token)
+                headers: functions.header(token)
             });
             const dataBabysitter: any = await response.json();
-            funcitons.createOptionBabysitter(dataBabysitter);
+            functions.createOptionBabysitter(dataBabysitter);
 
             const user: any = await this.getUser();
             if (user.babysitter !== null) {
@@ -273,7 +273,7 @@ export const AsyncFunctions = {
             }
             await fetch(`http://localhost:3000/api${user.user.imgProfile}`, {
                 method: 'GET',
-                headers: funcitons.header(token)
+                headers: functions.header(token)
             })
                 .then(response => response.blob())
                 .then(blob => {
@@ -302,7 +302,7 @@ export const AsyncFunctions = {
 
             const response: Response = await fetch('http://localhost:3000/api/profile', {
                 method: "PUT",
-                headers: funcitons.header(token, true),
+                headers: functions.header(token, true),
                 body: formData
             });
 

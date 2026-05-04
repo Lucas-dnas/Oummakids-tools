@@ -7,7 +7,8 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
         step((generator = generator.apply(thisArg, _arguments || [])).next());
     });
 };
-import { funcitons } from "../functions/functions.js";
+import { functions } from "../functions/functions.js";
+// import { io } from "socket.io-client";
 export let token;
 export let socketVariable;
 export const AsyncFunctions = {
@@ -16,7 +17,7 @@ export const AsyncFunctions = {
             try {
                 const response = yield fetch('http://localhost:3000/api/profile', {
                     method: "GET",
-                    headers: funcitons.header(token)
+                    headers: functions.header(token)
                 });
                 const profile = yield response.json();
                 if (response.ok) {
@@ -41,7 +42,7 @@ export const AsyncFunctions = {
                 selectDeleteChat.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
                 const response = yield fetch('http://localhost:3000/api/profile/chats', {
                     method: "GET",
-                    headers: funcitons.header(token),
+                    headers: functions.header(token),
                 });
                 const chats = yield response.json();
                 const user = yield this.getUser();
@@ -83,7 +84,7 @@ export const AsyncFunctions = {
             try {
                 const response = yield fetch('http://localhost:3000/api/babysitters', {
                     method: "GET",
-                    headers: funcitons.header(token)
+                    headers: functions.header(token)
                 });
                 const data = yield response.json();
                 if (response.ok) {
@@ -138,14 +139,14 @@ export const AsyncFunctions = {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const select = document.getElementById('selectLogin');
-                const response = yield fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: funcitons.header(token) });
+                const response = yield fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: functions.header(token) });
                 const data = yield response.json();
                 if (response.ok) {
                     console.log(data);
                     select.innerHTML = '<option value="">-- Sélectionner un user pour se login --</option>';
-                    const admin = funcitons.loadThreeFirstUsersCredentials('admin');
-                    const parent = funcitons.loadThreeFirstUsersCredentials('parent');
-                    const babysitter = funcitons.loadThreeFirstUsersCredentials('babysitter');
+                    const admin = functions.loadThreeFirstUsersCredentials('admin');
+                    const parent = functions.loadThreeFirstUsersCredentials('parent');
+                    const babysitter = functions.loadThreeFirstUsersCredentials('babysitter');
                     for (const element of [admin, parent, babysitter]) {
                         select.appendChild(element);
                     }
@@ -189,7 +190,7 @@ export const AsyncFunctions = {
                     console.log("Yessir! Good Sir! 🫡");
                     console.log(data);
                     token = data.user.token;
-                    funcitons.header(token);
+                    functions.header(token);
                     const socket = io("http://localhost:3000", {
                         auth: {
                             token: token
@@ -235,10 +236,10 @@ export const AsyncFunctions = {
                 selectCreateChat.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
                 const response = yield fetch('http://localhost:3000/api/babysitters', {
                     method: "GET",
-                    headers: funcitons.header(token)
+                    headers: functions.header(token)
                 });
                 const dataBabysitter = yield response.json();
-                funcitons.createOptionBabysitter(dataBabysitter);
+                functions.createOptionBabysitter(dataBabysitter);
                 const user = yield this.getUser();
                 if (user.babysitter !== null) {
                     const selectParentProfile = document.getElementById('selectParentProfile');
@@ -273,7 +274,7 @@ export const AsyncFunctions = {
                 }
                 yield fetch(`http://localhost:3000/api${user.user.imgProfile}`, {
                     method: 'GET',
-                    headers: funcitons.header(token)
+                    headers: functions.header(token)
                 })
                     .then(response => response.blob())
                     .then(blob => {
@@ -302,7 +303,7 @@ export const AsyncFunctions = {
                 console.log(formData);
                 const response = yield fetch('http://localhost:3000/api/profile', {
                     method: "PUT",
-                    headers: funcitons.header(token, true),
+                    headers: functions.header(token, true),
                     body: formData
                 });
                 const data = yield response.json();
