@@ -21,16 +21,18 @@ resetBtn?.addEventListener('click', async (e) => {
         const newPassword = document.getElementById('newPassword') as HTMLInputElement;
         const confirmationPassword = document.getElementById('confirmationPassword') as HTMLInputElement;
         const resetToken: string | undefined = await recoveryToken();
-
+        console.log(newPassword, confirmationPassword);
+        
         const response: Response = await fetch(`http://localhost:3000/api/auth/reset/password?token=${resetToken}`, {
             method: "POST",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({
-                newPassword: newPassword,
-                confirmationPassword: confirmationPassword
+                "newPassword": newPassword.value,
+                "confirmationPassword": confirmationPassword.value
             })
         });
-
+        console.log('hello');
+        
         const data: any = await response.json();
         console.log(data);
 

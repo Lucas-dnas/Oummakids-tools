@@ -32,14 +32,16 @@ resetBtn === null || resetBtn === void 0 ? void 0 : resetBtn.addEventListener('c
         const newPassword = document.getElementById('newPassword');
         const confirmationPassword = document.getElementById('confirmationPassword');
         const resetToken = yield recoveryToken();
+        console.log(newPassword, confirmationPassword);
         const response = yield fetch(`http://localhost:3000/api/auth/reset/password?token=${resetToken}`, {
             method: "POST",
             headers: { "Content-type": "application/json" },
             body: JSON.stringify({
-                newPassword: newPassword,
-                confirmationPassword: confirmationPassword
+                "newPassword": newPassword.value,
+                "confirmationPassword": confirmationPassword.value
             })
         });
+        console.log('hello');
         const data = yield response.json();
         console.log(data);
     }
