@@ -1,4 +1,4 @@
-export const funcitons = {
+export const functions = {
     header(token, upload) {
         if (upload) {
             return new Headers({

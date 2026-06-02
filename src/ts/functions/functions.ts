@@ -1,5 +1,5 @@
 
-export const funcitons = {
+export const functions = {
     header(token: string | null, upload?: boolean): Headers {
         if (upload) {
             return new Headers({

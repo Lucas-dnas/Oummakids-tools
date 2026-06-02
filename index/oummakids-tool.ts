@@ -1,5 +1,5 @@
 import { AsyncFunctions, socketVariable, token } from "../src/ts/AsyncFunctions/asyncFunctions.js";
-import { funcitons } from "../src/ts/functions/functions.js";
+import { functions } from "../src/ts/functions/functions.js";
 
 // Constantes
 const addBabysitter = document.getElementById('addBabysitter') as HTMLSelectElement;
@@ -49,7 +49,7 @@ incrementBabysitter?.addEventListener('click', (e) => {
 addParent?.addEventListener('click', async (e) => {
     e.preventDefault();
     try {
-        const response: Response = await fetch('http://localhost:3000/api/auth/register/parent', {
+        const response: Response = await fetch('http://localhost:3000/auth/register/parent', {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -82,7 +82,7 @@ addParent?.addEventListener('click', async (e) => {
 addBabysitter?.addEventListener('click', async (e) => {
     e.preventDefault();
     try {
-        const response: Response = await fetch('http://localhost:3000/api/auth/register/babysitter', {
+        const response: Response = await fetch('http://localhost:3000/auth/register/babysitter', {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -117,9 +117,9 @@ addBabysitter?.addEventListener('click', async (e) => {
 getProfile?.addEventListener('click', async (e) => {
     e.preventDefault();
     try {
-        const response = await fetch('http://localhost:3000/api/profile', {
+        const response = await fetch('http://localhost:3000/profile', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const profile = await response.json();
 
@@ -139,9 +139,9 @@ getProfileBabysitter?.addEventListener('click', async (e) => {
     try {
         const select = document.getElementById('selectProfileBabysitter') as HTMLSelectElement;
         const id: number = Number(select.value);
-        const response: Response = await fetch(`http://localhost:3000/api/babysitters/${id}`, {
+        const response: Response = await fetch(`http://localhost:3000/babysitters/${id}`, {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data: JSON = await response.json();
         if (response.ok) {
@@ -165,9 +165,9 @@ getChat?.addEventListener('click', async (e) => {
         const select = document.getElementById('selectChat') as HTMLSelectElement;
         const id: number = Number(select?.value);
 
-        const response: Response = await fetch(`http://localhost:3000/api/profile/chats/${id}`, {
+        const response: Response = await fetch(`http://localhost:3000/profile/chats/${id}`, {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const chat: JSON = await response.json();
         if (response.ok) {
@@ -186,8 +186,8 @@ getParentProfile?.addEventListener('click', async (e) => {
         const select = document.getElementById('selectParentProfile') as HTMLSelectElement;
         const id: number = Number(select?.value);
 
-        const response: Response = await fetch(`http://localhost:3000/api/parent/${id}`, {
-            headers: funcitons.header(token)
+        const response: Response = await fetch(`http://localhost:3000/parent/${id}`, {
+            headers: functions.header(token)
         });
 
         const data: any = await response.json();
@@ -206,9 +206,9 @@ getParentProfile?.addEventListener('click', async (e) => {
 deleteUser?.addEventListener('click', async (e) => {
     e.preventDefault();
     try {
-        const response: Response = await fetch('http://localhost:3000/api/profile', {
+        const response: Response = await fetch('http://localhost:3000/profile', {
             method: "DELETE",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         if (response.status === 204) {
             console.log("You died");
@@ -228,9 +228,9 @@ deleteChat?.addEventListener('click', async (e) => {
         if (!id) {
             console.log('Id missing for deleted chat');
         }
-        const response: Response = await fetch(`http://localhost:3000/api/profile/chats/${id}`, {
+        const response: Response = await fetch(`http://localhost:3000/profile/chats/${id}`, {
             method: "DELETE",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         if (response.status === 204) {
             console.log("Chat killed!");
@@ -248,9 +248,9 @@ selectAllParents?.addEventListener('click', async (e) => {
     e.preventDefault();
     try {
 
-        const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllParents', {
+        const response: Response = await fetch('http://localhost:3000/profile/admin/getAllParents', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data: JSON = await response.json();
         if (response.ok) {
@@ -271,9 +271,9 @@ selectAllBabysitters?.addEventListener('click', async (e) => {
 selectAllUsers?.addEventListener('click', async (e) => {
     e.preventDefault();
     try {
-        const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', {
+        const response: Response = await fetch('http://localhost:3000/profile/admin/getAllUsers', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data: JSON = await response.json();
         if (response.ok) {
@@ -316,9 +316,9 @@ createChat?.addEventListener('click', async (e) => {
     try {
         const select = document.getElementById('selectCreateChat') as HTMLSelectElement;
         const id: number = Number(select?.value);
-        const response: Response = await fetch(`http://localhost:3000/api/profile/chats/${id}`, {
+        const response: Response = await fetch(`http://localhost:3000/profile/chats/${id}`, {
             method: "POST",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
 
         const data = await response.json();

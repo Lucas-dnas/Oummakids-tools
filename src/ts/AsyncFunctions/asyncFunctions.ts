@@ -1,4 +1,4 @@
-import { funcitons } from "../functions/functions.js";
+import { functions } from "../functions/functions.js";
 
 export let token: string;
 export let socketVariable: any;
@@ -8,9 +8,9 @@ export const AsyncFunctions = {
 
     async getUser() {
         try {
-            const response = await fetch('http://localhost:3000/api/profile', {
+            const response = await fetch('http://localhost:3000/profile', {
                 method: "GET",
-                headers: funcitons.header(token)
+                headers: functions.header(token)
             });
             const profile: any = await response.json();
 
@@ -24,7 +24,7 @@ export const AsyncFunctions = {
             console.error(error);
         }
     },
-    
+
     async getAllChatsFunction() {
         try {
             const select = document.getElementById('selectChat') as HTMLSelectElement;
@@ -33,9 +33,9 @@ export const AsyncFunctions = {
             const selectDeleteChat = document.getElementById('selectDeleteChat') as HTMLSelectElement;
             selectDeleteChat.innerHTML = '<option value="">-- Sélectionner un chat --</option>';
 
-            const response: Response = await fetch('http://localhost:3000/api/profile/chats', {
+            const response: Response = await fetch('http://localhost:3000/profile/chats', {
                 method: "GET",
-                headers: funcitons.header(token),
+                headers: functions.header(token),
             });
 
             const chats: any = await response.json();
@@ -79,9 +79,9 @@ export const AsyncFunctions = {
 
     async getAllBabysitters(): Promise<any> {
         try {
-            const response: Response = await fetch('http://localhost:3000/api/babysitters', {
+            const response: Response = await fetch('http://localhost:3000/babysitters', {
                 method: "GET",
-                headers: funcitons.header(token)
+                headers: functions.header(token)
             });
             const data: any = await response.json();
             if (response.ok) {
@@ -131,15 +131,16 @@ export const AsyncFunctions = {
     async loginGeneratedUsers(): Promise<void> {
         try {
             const select = document.getElementById('selectLogin') as HTMLSelectElement;
-            const response: Response = await fetch('http://localhost:3000/api/profile/admin/getAllUsers', { method: "GET", headers: funcitons.header(token) });
+            const response: Response = await fetch('http://localhost:3000/profile/admin/getAllUsers', { method: "GET", headers: functions.header(token) });
             const data: any = await response.json();
 
             if (response.ok) {
                 console.log(data);
+
                 select.innerHTML = '<option value="">-- Sélectionner un user pour se login --</option>';
-                const admin = funcitons.loadThreeFirstUsersCredentials('admin');
-                const parent = funcitons.loadThreeFirstUsersCredentials('parent');
-                const babysitter = funcitons.loadThreeFirstUsersCredentials('babysitter');
+                const admin = functions.loadThreeFirstUsersCredentials('admin');
+                const parent = functions.loadThreeFirstUsersCredentials('parent');
+                const babysitter = functions.loadThreeFirstUsersCredentials('babysitter');
 
                 for (const element of [admin, parent, babysitter]) {
                     select.appendChild(element);
@@ -167,7 +168,7 @@ export const AsyncFunctions = {
             const select = document.getElementById('selectLogin') as HTMLSelectElement;
             const cerdentials: string[] = select.value.split(' ');
 
-            const response = await fetch('http://localhost:3000/api/auth/login', {
+            const response: Response = await fetch('http://localhost:3000/auth/login', {
                 method: "POST",
                 headers: {
                     "Content-type": "application/json",
@@ -179,12 +180,13 @@ export const AsyncFunctions = {
                     }
                 )
             });
+
             const data: any = await response.json();
             if (response.ok) {
                 console.log("Yessir! Good Sir! 🫡");
                 console.log(data);
                 token = data.user.token;
-                funcitons.header(token)
+                functions.header(token);
                 const socket = io("http://localhost:3000", {
                     auth: {
                         token: token
@@ -233,9 +235,9 @@ export const AsyncFunctions = {
             selectAllBabysitters.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
             selectCreateChat.innerHTML = '<option value="">-- Sélectionner un babysitter --</option>';
 
-            const response: Response = await fetch('http://localhost:3000/api/babysitters', {
+            const response: Response = await fetch('http://localhost:3000/babysitters', {
                 method: "GET",
-                headers: funcitons.header(token)
+                headers: functions.header(token)
             });
             const dataBabysitter: any = await response.json();
             dataBabysitter.babysitters.forEach((babysitter: any) => {
@@ -275,13 +277,13 @@ export const AsyncFunctions = {
                 selectImg.remove();
             }
             console.log(divImgProfile);
-            
+
             if (!divImgProfile) {
                 return;
             }
-            await fetch(`http://localhost:3000/api${user.user.imgProfile}`, {
+            await fetch(`http://localhost:3000/${user.user.imgProfile}`, {
                 method: 'GET',
-                headers: funcitons.header(token)
+                headers: functions.header(token)
             })
                 .then(response => response.blob())
                 .then(blob => {
@@ -308,9 +310,9 @@ export const AsyncFunctions = {
             formData.append('imgProfile', file);
             console.log(formData);
 
-            const response: Response = await fetch('http://localhost:3000/api/profile', {
+            const response: Response = await fetch('http://localhost:3000/profile', {
                 method: "PUT",
-                headers: funcitons.header(token, true),
+                headers: functions.header(token, true),
                 body: formData
             });
 

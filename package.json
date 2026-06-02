@@ -9,7 +9,7 @@
   "author": "me",
   "license": "ISC",
   "devDependencies": {
-    "typescript": "^6.0.2"
+    "typescript": "^6.0.3"
   },
   "dependencies": {
     "socket.io-client": "^4.8.3"

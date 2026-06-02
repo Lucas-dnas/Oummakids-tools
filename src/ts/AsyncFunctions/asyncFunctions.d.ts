@@ -4,7 +4,7 @@ export declare const AsyncFunctions: {
     getUser(): Promise<any>;
     getAllChatsFunction(): Promise<any>;
     getAllBabysitters(): Promise<any>;
-    sendMessageFunction(): Promise<void>;
+    loadUsersForsendMessageFunction(): Promise<void>;
     loginGeneratedUsers(): Promise<void>;
     login(): Promise<void>;
     loadHtmlElement(): Promise<void>;

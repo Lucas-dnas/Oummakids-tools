@@ -8,7 +8,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 import { AsyncFunctions, socketVariable, token } from "../src/ts/AsyncFunctions/asyncFunctions.js";
-import { funcitons } from "../src/ts/functions/functions.js";
+import { functions } from "../src/ts/functions/functions.js";
 // Constantes
 const addBabysitter = document.getElementById('addBabysitter');
 const addParent = document.getElementById('addParent');
@@ -52,7 +52,7 @@ incrementBabysitter === null || incrementBabysitter === void 0 ? void 0 : increm
 addParent === null || addParent === void 0 ? void 0 : addParent.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
     e.preventDefault();
     try {
-        const response = yield fetch('http://localhost:3000/api/auth/register/parent', {
+        const response = yield fetch('http://localhost:3000/auth/register/parent', {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -85,7 +85,7 @@ addParent === null || addParent === void 0 ? void 0 : addParent.addEventListener
 addBabysitter === null || addBabysitter === void 0 ? void 0 : addBabysitter.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
     e.preventDefault();
     try {
-        const response = yield fetch('http://localhost:3000/api/auth/register/babysitter', {
+        const response = yield fetch('http://localhost:3000/auth/register/babysitter', {
             method: "POST",
             headers: {
                 "Content-type": "application/json"
@@ -120,9 +120,9 @@ addBabysitter === null || addBabysitter === void 0 ? void 0 : addBabysitter.addE
 getProfile === null || getProfile === void 0 ? void 0 : getProfile.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
     e.preventDefault();
     try {
-        const response = yield fetch('http://localhost:3000/api/profile', {
+        const response = yield fetch('http://localhost:3000/profile', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const profile = yield response.json();
         if (response.ok) {
@@ -143,9 +143,9 @@ getProfileBabysitter === null || getProfileBabysitter === void 0 ? void 0 : getP
     try {
         const select = document.getElementById('selectProfileBabysitter');
         const id = Number(select.value);
-        const response = yield fetch(`http://localhost:3000/api/babysitters/${id}`, {
+        const response = yield fetch(`http://localhost:3000/babysitters/${id}`, {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data = yield response.json();
         if (response.ok) {
@@ -170,9 +170,9 @@ getChat === null || getChat === void 0 ? void 0 : getChat.addEventListener('clic
     try {
         const select = document.getElementById('selectChat');
         const id = Number(select === null || select === void 0 ? void 0 : select.value);
-        const response = yield fetch(`http://localhost:3000/api/profile/chats/${id}`, {
+        const response = yield fetch(`http://localhost:3000/profile/chats/${id}`, {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const chat = yield response.json();
         if (response.ok) {
@@ -192,8 +192,8 @@ getParentProfile === null || getParentProfile === void 0 ? void 0 : getParentPro
     try {
         const select = document.getElementById('selectParentProfile');
         const id = Number(select === null || select === void 0 ? void 0 : select.value);
-        const response = yield fetch(`http://localhost:3000/api/parent/${id}`, {
-            headers: funcitons.header(token)
+        const response = yield fetch(`http://localhost:3000/parent/${id}`, {
+            headers: functions.header(token)
         });
         const data = yield response.json();
         if (response.ok) {
@@ -212,9 +212,9 @@ getParentProfile === null || getParentProfile === void 0 ? void 0 : getParentPro
 deleteUser === null || deleteUser === void 0 ? void 0 : deleteUser.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
     e.preventDefault();
     try {
-        const response = yield fetch('http://localhost:3000/api/profile', {
+        const response = yield fetch('http://localhost:3000/profile', {
             method: "DELETE",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         if (response.status === 204) {
             console.log("You died");
@@ -236,9 +236,9 @@ deleteChat === null || deleteChat === void 0 ? void 0 : deleteChat.addEventListe
         if (!id) {
             console.log('Id missing for deleted chat');
         }
-        const response = yield fetch(`http://localhost:3000/api/profile/chats/${id}`, {
+        const response = yield fetch(`http://localhost:3000/profile/chats/${id}`, {
             method: "DELETE",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         if (response.status === 204) {
             console.log("Chat killed!");
@@ -256,9 +256,9 @@ deleteChat === null || deleteChat === void 0 ? void 0 : deleteChat.addEventListe
 selectAllParents === null || selectAllParents === void 0 ? void 0 : selectAllParents.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
     e.preventDefault();
     try {
-        const response = yield fetch('http://localhost:3000/api/profile/admin/getAllParents', {
+        const response = yield fetch('http://localhost:3000/profile/admin/getAllParents', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data = yield response.json();
         if (response.ok) {
@@ -281,9 +281,9 @@ selectAllBabysitters === null || selectAllBabysitters === void 0 ? void 0 : sele
 selectAllUsers === null || selectAllUsers === void 0 ? void 0 : selectAllUsers.addEventListener('click', (e) => __awaiter(void 0, void 0, void 0, function* () {
     e.preventDefault();
     try {
-        const response = yield fetch('http://localhost:3000/api/profile/admin/getAllUsers', {
+        const response = yield fetch('http://localhost:3000/profile/admin/getAllUsers', {
             method: "GET",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data = yield response.json();
         if (response.ok) {
@@ -325,9 +325,9 @@ createChat === null || createChat === void 0 ? void 0 : createChat.addEventListe
     try {
         const select = document.getElementById('selectCreateChat');
         const id = Number(select === null || select === void 0 ? void 0 : select.value);
-        const response = yield fetch(`http://localhost:3000/api/profile/chats/${id}`, {
+        const response = yield fetch(`http://localhost:3000/profile/chats/${id}`, {
             method: "POST",
-            headers: funcitons.header(token)
+            headers: functions.header(token)
         });
         const data = yield response.json();
         if (response.ok || (response.status === 201)) {
@@ -371,8 +371,4 @@ imgProfileBtn === null || imgProfileBtn === void 0 ? void 0 : imgProfileBtn.addE
     console.log(AsyncFunctions.profileImg(file));
     return;
 }));
-// fetch("/upload", {
-//   method: "POST",
-//   body: formData
-// });
 //# sourceMappingURL=oummakids-tool.js.map
