@@ -1,0 +1,106 @@
+FRONT-END
+I. Installer et configurer son environnement de travail en fonction du projet web ou web mobile
+
+    logo:    Pour commencer, j'installe Figma afin de réalisé les wireframes, maquettes, mookboards de ma futur             application web.
+
+    logo:    Par la suite, j'installe un éditeur de code, ici Vscode à ma préférence, pour sa grande               
+        compatibilitée multi-os et sa gratuitée.
+
+    logo:    Afin de travaillé de manière efficace, je met en place un outil de versioning, GitLab dans mon cas,            mais ça aurait pu être GitHub ou  également.
+
+    logo:    Afin de simuler de futurs serveurs, j'installe Docker-Desktop.
+
+    logo:    J'installe également Looping pour faire les schémas MCD,MLD,MPD pour la BDD.
+    
+    
+II. Maquetter des interfaces utilisateur web ou web mobile
+
+    Pour réalisé ma maquette, je me sers de Figma et je commence par faire un wireframe 
+    *****insert image*****.
+    
+    
+    Je choisis une palette de couleur conforme aux normes RGAA, ainsi qu'au règle de contraste pour les personnes       malvoyante. ***** exemple palette *****
+    
+    
+
+
+
+
+III. Réaliser des interfaces utilisateur statiques web ou web mobile
+    
+    Pour faire un site statique, je me sers uniquemenet de HTML et CSS.
+    
+    
+    Explixations Doctype
+    Explications main - section - div - etc...
+    
+
+IV. Développer la partie dynamique des interfaces utilisateur web ou web mobile
+
+
+
+
+
+
+
+BACK-END
+
+
+I. Mettre en place une base de données relationnelle
+
+    Pour réalisé ma BDD, je commence par faire mon Modele Conceptuel de Donnée (MCD)
+    ***** insert picture *****
+    
+    puis mon Modele Logique de Données (MLD)
+    ***** insert picture *****
+    
+    et pour finir mon Modele Physique de Données (MPD)
+    ***** insert picture *****
+
+                            </ expliquer une ou deux relation entre les tables />
+
+
+
+II. Développer des composants d’accès aux données SQL et NoSQL
+
+    CRUD SQL:
+    
+        Create:
+            INSERT INTO <table>(<field01, field02, etc..>) VALUES(<value01, value02, etc..>)
+            ***** insert picture ******
+        Read
+            SELECT <field> FROM <table> WHERE <condition>
+            ***** insert picture ******
+        Update
+            UPDATE <table> SET <field> = < new value > WHERE <condition>
+            ***** insert picture ******
+        Delete 
+            DELETE FROM <table> WHERE <condition>
+            ***** insert picture ******
+            
+    CRUD NoSQL:
+    
+        Create:
+
+            ***** insert picture ******
+        Read
+
+            ***** insert picture ******
+        Update
+
+            ***** insert picture ******
+        Delete 
+
+            ***** insert picture ******
+            
+    
+    
+    
+
+III. Développer des composants métier coté serveur
+(Ex: Controller,service,routes)
+
+IV. Documenter le déploiement d'une application dynamique web ou web mobile
+(NGINX deploy porject gp)
+
+
